@@ -9,8 +9,16 @@ import (
 )
 
 const (
-	collapsedFuncName = "collapsed"
-	jsonCss           = `div.json {
+	collapsedFuncName        = "collapsed"
+	jsonExpandCollapseScript = `function ` + collapsedFuncName + `(evt) {
+  if (evt.currentTarget === evt.target) {
+    evt.currentTarget.classList.toggle("collapsed");
+  } else if (evt.target.classList.contains("expand")) {
+    evt.target.parentElement.classList.toggle("collapsed");
+  }
+  evt.stopPropagation();
+}`
+	jsonCss = `div.json {
   	border: 1px solid #ddd;
 	background-color: #eee;
 	padding: 2px;
@@ -44,14 +52,6 @@ div.json div.collapsed > span.expand {
 )
 
 var (
-	jsonExpandCollapseScript = Script(`function `, collapsedFuncName, `(evt) {
-  if (evt.currentTarget === evt.target) {
-    evt.currentTarget.classList.toggle("collapsed");
-  } else if (evt.target.classList.contains("expand")) {
-    evt.target.parentElement.classList.toggle("collapsed");
-  }
-  evt.stopPropagation();
-}`)
 	collapseMarker = aitch.Collection(Span(Class("expand"), "..."), Br())
 	collapseAtt    = OnClick(collapsedFuncName, "(event)")
 	objStart       = []byte{'{'}
