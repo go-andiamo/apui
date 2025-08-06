@@ -53,10 +53,9 @@ div.json div.collapsed > span.expand {
 
 var (
 	collapseMarker = aitch.Collection(Span(Class("expand"), "..."), Br())
-	//collapseAtt    = OnClick(collapsedFuncName, "(event)")
-	collapseAtt = OnClick("(e => ", collapsedFuncName, "(e))(event)")
-	objStart    = []byte{'{'}
-	arrStart    = []byte{'['}
+	collapseAtt    = OnClick([]byte("(e => " + collapsedFuncName + "(e))(event)"))
+	objStart       = []byte{'{'}
+	arrStart       = []byte{'['}
 )
 
 var jsonRenderNode = Div(
