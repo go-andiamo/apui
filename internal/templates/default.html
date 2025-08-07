@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>{{.Cargo.title}}</title>
     {{head .}}
+    {{styles .}}
     {{headScripts .}}
 </head>
-<body>
+<body class="{{.Cargo.theme}}">
 {{header .}}
-{{inner .}}
+{{navigation .}}
+{{main .}}
 {{footer .}}
 {{bodyScripts .}}
 </body>

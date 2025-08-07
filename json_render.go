@@ -3,7 +3,7 @@ package apui
 import (
 	"encoding/json"
 	"github.com/go-andiamo/aitch"
-	. "github.com/go-andiamo/aitch/html"
+	"github.com/go-andiamo/aitch/html"
 	"github.com/go-andiamo/splitter"
 	"strings"
 )
@@ -19,8 +19,11 @@ const (
   evt.stopPropagation();
 }`
 	jsonCss = `div.json {
-  	border: 1px solid #ddd;
-	background-color: #eee;
+  	border: 1px solid var(--json-border-color);
+	background-color: var(--json-bg-color);
+	color: var(--json-text-color);
+	font-family: var(--json-font-family,monospace),monospace;
+	font-size: var(--json-font-size);
 	padding: 2px;
 	max-height: 400px;
 	overflow: hidden;
@@ -30,12 +33,12 @@ div.json div * {
 	cursor: text;
 }
 div.json a {
-	font-family: monospace;
+	font-family: var(--json-font-family,monospace),monospace;
 	cursor: pointer;
 }
 div.json div {
 	display: inline;
-	font-family: monospace;
+	font-family: var(--json-font-family,monospace),monospace;
 	cursor: pointer;
 }
 div.json div.collapsed * {
@@ -46,22 +49,25 @@ div.json span.expand {
 }
 div.json div.collapsed > span.expand {
 	display: inline;
-	background-color: #aaa;
+	background-color: var(--json-collapse-bg-color);
+	color: var(--json-collapse-fg-color);
 	cursor: pointer;
 }`
 )
 
 var (
-	collapseMarker = aitch.Collection(Span(Class("expand"), "..."), Br())
-	collapseAtt    = OnClick([]byte("(e => " + collapsedFuncName + "(e))(event)"))
-	objStart       = []byte{'{'}
-	arrStart       = []byte{'['}
+	jsonExpandCollapseScriptNode = html.Script(html.Type("text/javascript"), []byte(jsonExpandCollapseScript))
+	jsonCssNode                  = html.StyleElement([]byte(jsonCss))
+	collapseMarker               = aitch.Collection(html.Span(html.Class("expand"), "..."), html.Br())
+	collapseAtt                  = html.OnClick([]byte("(e => " + collapsedFuncName + "(e))(event)"))
+	objStart                     = []byte{'{'}
+	arrStart                     = []byte{'['}
 )
 
-var jsonRenderNode = Div(
-	Class("json"),
-	ContentEditable("true"),
-	OnBeforeInput("return false"),
+var jsonRenderNode = html.Div(
+	html.Class("json"),
+	html.ContentEditable("true"),
+	html.OnBeforeInput("return false"),
 	aitch.Imperative(func(ctx aitch.ImperativeContext) error {
 		data, err := json.MarshalIndent(ctx.Context().Cargo, "", "    ")
 		if err != nil {
@@ -83,7 +89,7 @@ var jsonRenderNode = Div(
 				ctx.End()
 				ctx.WriteRaw(nbsp)
 				ctx.WriteRaw(quote)
-				ctx.Start(elemA, false, Href(uri), ContentEditable("false"))
+				ctx.Start(elemA, false, html.Href(uri), html.ContentEditable("false"))
 				ctx.WriteRaw([]byte(uri))
 				ctx.End()
 				ctx.WriteRaw(quote)

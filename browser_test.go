@@ -18,12 +18,7 @@ func TestNewBrowser(t *testing.T) {
 
 func TestBrowser_Write(t *testing.T) {
 	b, err := NewBrowser(
-		BodyScript{
-			Script: jsonExpandCollapseScript,
-		},
-		Css{
-			Content: jsonCss,
-		},
+		Theme{Name: "Test", Navigation: ThemeItem{BackgroundColor: "red"}},
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
@@ -35,7 +30,7 @@ func TestBrowser_Write(t *testing.T) {
 		Name: "Bilbo",
 		Age:  42,
 	}
-	b.Write(w, r, item)
+	b.Write(w, r, item, map[string]any{"theme": "theme-test"})
 	out, err := io.ReadAll(w.Result().Body)
 	f, err := os.Create(t.Name() + ".html")
 	defer f.Close()

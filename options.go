@@ -21,7 +21,13 @@ type BodyScript struct {
 	Script string
 }
 
-type Css struct {
+type AddStyling struct {
 	Media   string
 	Content string
 }
+
+type HeaderRenderer aitch.Node
+
+type FooterRenderer aitch.Node
+
+type JsonRenderer aitch.Node
