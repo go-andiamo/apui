@@ -1,6 +1,7 @@
 package apui
 
 import (
+	"github.com/go-andiamo/chioas"
 	"github.com/stretchr/testify/require"
 	"io"
 	"net/http"
@@ -17,19 +18,28 @@ func TestNewBrowser(t *testing.T) {
 }
 
 func TestBrowser_Write(t *testing.T) {
+	def := chioas.Definition{
+		Info: chioas.Info{
+			Title:   "MyAPI",
+			Version: "1.0.0",
+		},
+	}
 	b, err := NewBrowser(
+		def,
 		Theme{Name: "Test", Navigation: ThemeItem{BackgroundColor: "red"}},
-		ShowHeader(false), ShowFooter(false),
+		ShowHeader(true), ShowFooter(true),
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "/", nil)
-	item := struct {
+	item := []struct {
 		Name string `json:"name"`
 		Age  int    `json:"age"`
 	}{
-		Name: "Bilbo",
-		Age:  42,
+		{
+			Name: "Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins ",
+			Age:  42,
+		},
 	}
 	b.Write(w, r, item, map[string]any{
 		"theme": "theme-test",

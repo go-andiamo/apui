@@ -34,10 +34,10 @@ var rootThemeVars = Theme{
 	},
 	Footer: ThemeItem{
 		TextColor:       "black",
-		BackgroundColor: "white",
-		BorderColor:     "#eee",
+		BackgroundColor: "#eee",
+		BorderColor:     "#aaa",
 		FontFamily:      "sans-serif",
-		FontSize:        "initial",
+		FontSize:        "75%",
 	},
 	Main: ThemeItem{
 		TextColor:       "black",
@@ -51,7 +51,7 @@ var rootThemeVars = Theme{
 		BackgroundColor: "#eee",
 		BorderColor:     "#ddd",
 		FontFamily:      "monospace",
-		FontSize:        "initial",
+		FontSize:        "90%",
 		CollapsedMarker: CollapseMarker{
 			TextColor:       "black",
 			BackgroundColor: "#aaa",
