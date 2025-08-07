@@ -37,6 +37,8 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 	rootVarsNode, _ := rootThemeVars.styleNode()
 	styles := []aitch.Node{rootVarsNode, styling.BaseCssNode, jsonCssNode}
 	overrideNodeMap := aitch.NodeMap{}
+	var headerRenderer aitch.Node
+	var footerRenderer aitch.Node
 	for _, o := range options {
 		switch option := o.(type) {
 		case HtmlTemplate:
@@ -76,6 +78,10 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			} else {
 				return nil, err
 			}
+		case HeaderRenderer:
+			headerRenderer = option
+		case FooterRenderer:
+			footerRenderer = option
 		case JsonRenderer:
 			b.jsonRenderer = option
 		case TemplateNode:
@@ -89,15 +95,22 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			b.showFooter = bool(option)
 		}
 	}
+	if headerRenderer == nil {
+		//todo
+		headerRenderer = b.buildHeaderNode()
+	}
+	if footerRenderer == nil {
+		footerRenderer = html.Span("Powered by ", html.Div(html.Class("github")), nbsp, html.A(html.Target("_blank"), html.Href("https://github.com/go-andiamo/apui"), "apui"))
+	}
 	nodeMap := aitch.NodeMap{
 		"head":        aitch.Imperative(b.writeHead),
 		"styles":      aitch.Collection(styles...),
 		"headScripts": aitch.Collection(headScripts...),
 		"bodyScripts": aitch.Collection(bodyScripts...),
-		"header":      aitch.When("show-header", html.Header(html.Class("header"), html.H1("Header"))),
+		"header":      aitch.When("show-header", html.Header(html.Class("header"), headerRenderer)),
 		"navigation":  html.Header(html.Class("navigation"), html.H3("Navigation")),
 		"main":        html.Main(aitch.Imperative(b.writeMain)),
-		"footer":      aitch.When("show-footer", html.Footer(html.Class("footer"), html.H3("Footer"))),
+		"footer":      aitch.When("show-footer", html.Footer(html.Class("footer"), footerRenderer)),
 	}
 	for k, v := range overrideNodeMap {
 		switch k {
@@ -124,6 +137,21 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 	}
 	b.template = template
 	return b, nil
+}
+
+func (b *Browser) buildHeaderNode() aitch.Node {
+	var title string
+	var version string
+	if b.definition != nil {
+		title, version = b.definition.Info.Title, b.definition.Info.Version
+	}
+	if title == "" {
+		title = "API"
+	}
+	if version == "" {
+		return html.H2(title)
+	}
+	return html.H2(title, html.Sup(html.Class("small"), " Version: ", version))
 }
 
 func (b *Browser) writeHead(ctx aitch.ImperativeContext) error {

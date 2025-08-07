@@ -26,8 +26,12 @@ const (
 	font-size: var(--json-font-size);
 	padding: 2px;
 	max-height: 400px;
-	overflow: hidden;
-	overflow-y: auto;
+	overflow: auto;
+	white-space: nowrap;
+}
+div.json * {
+	font-size: inherit;
+	white-space: nowrap;
 }
 div.json div * {
 	cursor: text;

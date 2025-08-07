@@ -121,10 +121,10 @@ const expectedRootVars = `:root {
 	--nav-font-family: sans-serif;
 	--nav-font-size: initial;
 	--ftr-text-color: black;
-	--ftr-bg-color: white;
-	--ftr-border-color: #eee;
+	--ftr-bg-color: #eee;
+	--ftr-border-color: #aaa;
 	--ftr-font-family: sans-serif;
-	--ftr-font-size: initial;
+	--ftr-font-size: 75%;
 	--main-text-color: black;
 	--main-bg-color: white;
 	--main-border-color: #eee;
@@ -134,7 +134,7 @@ const expectedRootVars = `:root {
 	--json-bg-color: #eee;
 	--json-border-color: #ddd;
 	--json-font-family: monospace;
-	--json-font-size: initial;
+	--json-font-size: 90%;
 	--json-collapse-fg-color: black;
 	--json-collapse-bg-color: #aaa;
 }`
