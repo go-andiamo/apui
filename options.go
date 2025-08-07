@@ -31,3 +31,7 @@ type HeaderRenderer aitch.Node
 type FooterRenderer aitch.Node
 
 type JsonRenderer aitch.Node
+
+type ShowHeader bool
+
+type ShowFooter bool
