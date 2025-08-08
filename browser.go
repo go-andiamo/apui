@@ -7,18 +7,20 @@ import (
 	"github.com/go-andiamo/aitch/html"
 	"github.com/go-andiamo/apui/internal/styling"
 	"github.com/go-andiamo/apui/internal/templates"
+	"github.com/go-andiamo/apui/themes"
 	"github.com/go-andiamo/chioas"
 	"net/http"
+	"strings"
 )
 
 type Browser struct {
-	template       *aitch.Template
-	definition     *chioas.Definition
-	headerRenderer aitch.Node
-	footerRenderer aitch.Node
-	jsonRenderer   aitch.Node
-	showHeader     bool
-	showFooter     bool
+	template     *aitch.Template
+	definition   *chioas.Definition
+	jsonRenderer aitch.Node
+	showHeader   bool
+	showFooter   bool
+	headNodes    []aitch.Node
+	defaultTheme string
 }
 
 func NewBrowser(options ...any) (*Browser, error) {
@@ -34,7 +36,7 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 	htmlSet := false
 	headScripts := make([]aitch.Node, 0)
 	bodyScripts := []aitch.Node{jsonExpandCollapseScriptNode}
-	rootVarsNode, _ := rootThemeVars.styleNode()
+	rootVarsNode, _ := themes.RootTheme.StyleNode()
 	styles := []aitch.Node{rootVarsNode, styling.BaseCssNode, jsonCssNode}
 	overrideNodeMap := aitch.NodeMap{}
 	var headerRenderer aitch.Node
@@ -72,9 +74,18 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 					styles = append(styles, html.StyleElement([]byte("\n"+option.Content)))
 				}
 			}
-		case Theme:
-			if ts, err := option.styleNode(); err == nil {
+		case themes.Theme:
+			if ts, err := option.StyleNode(); err == nil {
 				styles = append(styles, ts)
+				for _, link := range option.Links {
+					if link.Href != "" {
+						if link.Rel == "" {
+							b.headNodes = append(b.headNodes, html.Link(html.Href(link.Href), html.Rel("stylesheet")))
+						} else {
+							b.headNodes = append(b.headNodes, html.Link(html.Href(link.Href), html.Rel(link.Rel)))
+						}
+					}
+				}
 			} else {
 				return nil, err
 			}
@@ -93,24 +104,25 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			b.showHeader = bool(option)
 		case ShowFooter:
 			b.showFooter = bool(option)
+		case DefaultTheme:
+			b.defaultTheme, _ = themes.NormalizeName(string(option))
 		}
 	}
 	if headerRenderer == nil {
-		//todo
 		headerRenderer = b.buildHeaderNode()
 	}
 	if footerRenderer == nil {
-		footerRenderer = html.Span("Powered by ", html.Div(html.Class("github")), nbsp, html.A(html.Target("_blank"), html.Href("https://github.com/go-andiamo/apui"), "apui"))
+		footerRenderer = html.Span("Powered by ", html.Span(html.Class("github")), nbsp, html.A(html.Target("_blank"), html.Href("https://github.com/go-andiamo/apui"), "apui"))
 	}
 	nodeMap := aitch.NodeMap{
 		"head":        aitch.Imperative(b.writeHead),
 		"styles":      aitch.Collection(styles...),
 		"headScripts": aitch.Collection(headScripts...),
 		"bodyScripts": aitch.Collection(bodyScripts...),
-		"header":      aitch.When("show-header", html.Header(html.Class("header"), headerRenderer)),
-		"navigation":  html.Header(html.Class("navigation"), html.H3("Navigation")),
+		"header":      aitch.When(keyShowHeader, html.Header(html.Class("header"), headerRenderer)),
+		"navigation":  html.Header(html.Class("navigation"), aitch.Imperative(b.writeNavigation)),
 		"main":        html.Main(aitch.Imperative(b.writeMain)),
-		"footer":      aitch.When("show-footer", html.Footer(html.Class("footer"), footerRenderer)),
+		"footer":      aitch.When(keyShowFooter, html.Footer(html.Class("footer"), footerRenderer)),
 	}
 	for k, v := range overrideNodeMap {
 		switch k {
@@ -155,12 +167,62 @@ func (b *Browser) buildHeaderNode() aitch.Node {
 }
 
 func (b *Browser) writeHead(ctx aitch.ImperativeContext) error {
-	aitch.Comment("write head here").Render(ctx.Context())
-	// todo
+	for _, node := range b.headNodes {
+		if err := node.Render(ctx.Context()); err != nil {
+			return err
+		}
+	}
+	// todo more?
+	return nil
+}
+
+var getMethodNode = html.Span(html.Class("method", "get"), "GET")
+
+func getContextRequest(ctx *context.Context) (*http.Request, bool) {
+	if r, ok := ctx.Data[keyRequest]; ok {
+		if req, ok := r.(*http.Request); ok {
+			return req, true
+		}
+	}
+	return nil, false
+}
+
+func (b *Browser) writeNavigation(ctx aitch.ImperativeContext) error {
+	_ = getMethodNode.Render(ctx.Context())
+	if req, ok := getContextRequest(ctx.Context()); ok {
+		def, defs, paths := b.findRequestDef(req)
+		nodes := []aitch.Node{aitch.Text("/")}
+		for i, p := range paths {
+			if i == len(paths)-1 {
+				nodes = append(nodes, aitch.Text(p))
+			} else {
+				var partNode aitch.Node
+				if pd := defs[i]; pd != nil {
+					if m, ok := pd.Methods[http.MethodGet]; ok {
+						partNode = html.A(html.Href("/"+strings.Join(paths[:i+1], "/")), html.Title(m.Description), p)
+					}
+				}
+				if partNode == nil {
+					partNode = aitch.Text(p)
+				}
+				nodes = append(nodes, partNode, aitch.Text("/"))
+			}
+		}
+		if def != nil {
+			if m, ok := def.Methods[req.Method]; ok && m.Description != "" {
+				nodes = append(nodes, html.Span(html.Class("description"), html.Title(m.Description), m.Description))
+			}
+		}
+		ctx.WriteNodes(nodes...)
+		// todo does the endpoint support paging? (and how can we tell?)
+		// todo does the endpoint have query params?
+		// todo does the endpoint have associated methods?
+	}
 	return nil
 }
 
 func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {
+	// todo this is just sample code...
 	jctx := &context.Context{
 		Cargo:  ctx.Context().Data["response"],
 		Writer: ctx.Context().Writer,
@@ -171,7 +233,10 @@ func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {
 
 func (b *Browser) Write(w http.ResponseWriter, r *http.Request, response any, addCargo ...map[string]any) {
 	cargo := map[string]any{
-		"title": "Test me!",
+		keyTitle: "Test me!",
+	}
+	if b.defaultTheme != "" {
+		cargo[keyTheme] = "theme-" + b.defaultTheme
 	}
 	for _, a := range addCargo {
 		for k, v := range a {
@@ -179,12 +244,21 @@ func (b *Browser) Write(w http.ResponseWriter, r *http.Request, response any, ad
 		}
 	}
 	data := map[string]any{
-		"show-header": b.showHeader,
-		"show-footer": b.showFooter,
-		"request":     r,
-		"response":    response,
+		keyShowHeader: b.showHeader,
+		keyShowFooter: b.showFooter,
+		keyRequest:    r,
+		keyResponse:   response,
 	}
 	if err := b.template.Execute(w, data, cargo); err != nil {
 		panic(err)
 	}
 }
+
+const (
+	keyTitle      = "title"
+	keyTheme      = "theme"
+	keyShowHeader = "show-header"
+	keyShowFooter = "show-footer"
+	keyRequest    = "request"
+	keyResponse   = "response"
+)
