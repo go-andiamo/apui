@@ -29,6 +29,7 @@ header.header {
 	border-bottom: 1px solid var(--hdr-border-color);
 }
 header.navigation {
+	padding: 4px 4px 4px 4px;
 	font-family: var(--nav-font-family,sans-serif),sans-serif;
 	font-size: var(--nav-font-size);
 	color: var(--nav-text-color);
@@ -63,6 +64,59 @@ main {
 	height: 1.1em;
 	display: inline-block;
 	vertical-align: middle;
+}
+span.method {
+	color: var(--methods-text-color);
+	background-color: var(--methods-bg-color);
+	border: 1px solid var(--methods-border-color);
+	font-family: var(--methods-font-family,sans-serif),sans-serif;
+	padding: 1px 4px;
+	border-radius: 4px;
+	margin-right: 4px;
+}
+span.method.get {
+	color: var(--methods-get-text-color);
+	background-color: var(--methods-get-bg-color);
+	border: 1px solid var(--methods-get-border-color);
+}
+span.method.delete {
+	color: var(--methods-delete-text-color);
+	background-color: var(--methods-delete-bg-color);
+	border: 1px solid var(--methods-delete-border-color);
+}
+span.method.put {
+	color: var(--methods-put-text-color);
+	background-color: var(--methods-put-bg-color);
+	border: 1px solid var(--methods-put-border-color);
+}
+span.method.post {
+	color: var(--methods-post-text-color);
+	background-color: var(--methods-post-bg-color);
+	border: 1px solid var(--methods-post-border-color);
+}
+span.method.patch {
+	color: var(--methods-patch-text-color);
+	background-color: var(--methods-patch-bg-color);
+	border: 1px solid var(--methods-patch-border-color);
+}
+span.method.options {
+	color: var(--methods-options-text-color);
+	background-color: var(--methods-options-bg-color);
+	border: 1px solid var(--methods-options-border-color);
+}
+h1,h2,h3,h4,h5,h6 {
+	margin-block-start: 0.5rem;
+	margin-block-end: 0.5rem;
+}
+.description {
+	font-style: italic;
+	margin-left: 1em;
+    display: inline-block;
+    max-width: 15em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: text-bottom;
 }
 `
 

@@ -35,3 +35,5 @@ type JsonRenderer aitch.Node
 type ShowHeader bool
 
 type ShowFooter bool
+
+type DefaultTheme string

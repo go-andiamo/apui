@@ -31,18 +31,17 @@ const (
 }
 div.json * {
 	font-size: inherit;
+	font-family: inherit;
 	white-space: nowrap;
 }
 div.json div * {
 	cursor: text;
 }
 div.json a {
-	font-family: var(--json-font-family,monospace),monospace;
 	cursor: pointer;
 }
 div.json div {
 	display: inline;
-	font-family: var(--json-font-family,monospace),monospace;
 	cursor: pointer;
 }
 div.json div.collapsed * {

@@ -1,6 +1,9 @@
-package apui
+package themes
 
 import (
+	"bytes"
+	"github.com/go-andiamo/aitch"
+	"github.com/go-andiamo/aitch/context"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -78,7 +81,7 @@ func TestTheme_styleNode(t *testing.T) {
 				BorderColor:     "#fff",
 			},
 		}
-		node, err := theme.styleNode()
+		node, err := theme.StyleNode()
 		require.NoError(t, err)
 		output, err := testRender(node, nil, nil)
 		require.NoError(t, err)
@@ -93,48 +96,19 @@ func TestTheme_styleNode(t *testing.T) {
 	})
 	t.Run("bad name", func(t *testing.T) {
 		theme := Theme{}
-		_, err := theme.styleNode()
+		_, err := theme.StyleNode()
 		require.Error(t, err)
 	})
 }
 
-func TestRootThemeVars(t *testing.T) {
-	output, err := rootThemeVars.buildVars()
-	require.NoError(t, err)
-	require.Equal(t, expectedRootVars, string(output))
+func testRender(node aitch.Node, cargo any, data ...map[string]any) (string, error) {
+	var w bytes.Buffer
+	useData := map[string]any{}
+	for _, d := range data {
+		for k, v := range d {
+			useData[k] = v
+		}
+	}
+	err := node.Render(&context.Context{Writer: &w, Cargo: cargo, Data: useData})
+	return w.String(), err
 }
-
-const expectedRootVars = `:root {
-	--body-text-color: black;
-	--body-bg-color: white;
-	--body-border-color: #eee;
-	--body-font-family: sans-serif;
-	--body-font-size: initial;
-	--hdr-text-color: white;
-	--hdr-bg-color: #333;
-	--hdr-border-color: #eee;
-	--hdr-font-family: sans-serif;
-	--hdr-font-size: initial;
-	--nav-text-color: black;
-	--nav-bg-color: white;
-	--nav-border-color: #eee;
-	--nav-font-family: sans-serif;
-	--nav-font-size: initial;
-	--ftr-text-color: black;
-	--ftr-bg-color: #eee;
-	--ftr-border-color: #aaa;
-	--ftr-font-family: sans-serif;
-	--ftr-font-size: 75%;
-	--main-text-color: black;
-	--main-bg-color: white;
-	--main-border-color: #eee;
-	--main-font-family: sans-serif;
-	--main-font-size: initial;
-	--json-text-color: black;
-	--json-bg-color: #eee;
-	--json-border-color: #ddd;
-	--json-font-family: monospace;
-	--json-font-size: 90%;
-	--json-collapse-fg-color: black;
-	--json-collapse-bg-color: #aaa;
-}`
