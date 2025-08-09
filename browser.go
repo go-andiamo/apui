@@ -126,10 +126,12 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 	}
 	for k, v := range overrideNodeMap {
 		switch k {
-		case "header", "navigation":
+		case "navigation":
 			nodeMap[k] = html.Header(html.Class(k), v)
+		case "header":
+			nodeMap[k] = aitch.When(keyShowHeader, html.Header(html.Class(k), v))
 		case "footer":
-			nodeMap[k] = html.Footer(html.Class(k), v)
+			nodeMap[k] = aitch.When(keyShowFooter, html.Footer(html.Class(k), v))
 		default:
 			if _, has := nodeMap[k]; has {
 				return nil, fmt.Errorf("invalid override node: %s", k)
@@ -188,37 +190,39 @@ func getContextRequest(ctx *context.Context) (*http.Request, bool) {
 }
 
 func (b *Browser) writeNavigation(ctx aitch.ImperativeContext) error {
-	_ = getMethodNode.Render(ctx.Context())
-	if req, ok := getContextRequest(ctx.Context()); ok {
-		def, defs, paths := b.findRequestDef(req)
-		nodes := []aitch.Node{aitch.Text("/")}
-		for i, p := range paths {
-			if i == len(paths)-1 {
-				nodes = append(nodes, aitch.Text(p))
-			} else {
-				var partNode aitch.Node
-				if pd := defs[i]; pd != nil {
-					if m, ok := pd.Methods[http.MethodGet]; ok {
-						partNode = html.A(html.Href("/"+strings.Join(paths[:i+1], "/")), html.Title(m.Description), p)
+	var err error
+	if err = getMethodNode.Render(ctx.Context()); err == nil {
+		if req, ok := getContextRequest(ctx.Context()); ok {
+			def, defs, paths := b.findRequestDef(req)
+			nodes := []aitch.Node{aitch.Text("/")}
+			for i, p := range paths {
+				if i == len(paths)-1 {
+					nodes = append(nodes, aitch.Text(p))
+				} else {
+					var partNode aitch.Node
+					if pd := defs[i]; pd != nil {
+						if m, ok := pd.Methods[http.MethodGet]; ok {
+							partNode = html.A(html.Href("/"+strings.Join(paths[:i+1], "/")), html.Title(m.Description), p)
+						}
 					}
+					if partNode == nil {
+						partNode = aitch.Text(p)
+					}
+					nodes = append(nodes, partNode, aitch.Text("/"))
 				}
-				if partNode == nil {
-					partNode = aitch.Text(p)
+			}
+			if def != nil {
+				if m, ok := def.Methods[req.Method]; ok && m.Description != "" {
+					nodes = append(nodes, html.Span(html.Class("description"), html.Title(m.Description), m.Description))
 				}
-				nodes = append(nodes, partNode, aitch.Text("/"))
 			}
+			ctx.WriteNodes(nodes...)
+			b.writePagination(ctx, req, def)
+			b.writeQueryParams(ctx, req, def)
+			b.writeAssociatedMethods(ctx, req, def)
 		}
-		if def != nil {
-			if m, ok := def.Methods[req.Method]; ok && m.Description != "" {
-				nodes = append(nodes, html.Span(html.Class("description"), html.Title(m.Description), m.Description))
-			}
-		}
-		ctx.WriteNodes(nodes...)
-		// todo does the endpoint support paging? (and how can we tell?)
-		// todo does the endpoint have query params?
-		// todo does the endpoint have associated methods?
 	}
-	return nil
+	return err
 }
 
 func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {

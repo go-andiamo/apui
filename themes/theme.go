@@ -34,6 +34,7 @@ type ThemeItem struct {
 	BorderColor     string
 	FontFamily      string
 	FontSize        string
+	Opened          Coloring // only used for Navigation
 }
 
 type JsonTheme struct {
@@ -123,6 +124,11 @@ func (t ThemeItem) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "border-color", t.BorderColor, buf)
 	writeVar(part, "font-family", t.FontFamily, buf)
 	writeVar(part, "font-size", t.FontSize, buf)
+	if part == "nav" {
+		writeVar(part, "opened-text-color", t.Opened.TextColor, buf)
+		writeVar(part, "opened-bg-color", t.Opened.BackgroundColor, buf)
+		writeVar(part, "opened-border-color", t.Opened.TextColor, buf)
+	}
 }
 
 func (t JsonTheme) buildVars(part string, buf *bytes.Buffer) {

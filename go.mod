@@ -3,14 +3,14 @@ module github.com/go-andiamo/apui
 go 1.24
 
 require (
-	github.com/go-andiamo/aitch v1.4.3
+	github.com/go-andiamo/aitch v1.4.4
+	github.com/go-andiamo/chioas v1.16.4
+	github.com/go-andiamo/splitter v1.2.5
 	github.com/stretchr/testify v1.10.0
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-andiamo/chioas v1.16.4 // indirect
-	github.com/go-andiamo/splitter v1.2.5 // indirect
 	github.com/go-andiamo/urit v1.2.1 // indirect
 	github.com/go-chi/chi/v5 v5.0.8 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

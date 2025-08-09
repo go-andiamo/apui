@@ -2,6 +2,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-andiamo/aitch v1.4.3 h1:j++/nTNpUMOeRc6yQE0ghvpB3i+kIi8/RRXquCr9PJ4=
 github.com/go-andiamo/aitch v1.4.3/go.mod h1:MRKizCFJiZ4Q0ltZxKUg44+M6wEm6iqilb71dML8TPI=
+github.com/go-andiamo/aitch v1.4.4 h1:uPncMhhcWUd3qa7L/v7SR2U6KQ5axRux1KK+K6X4puE=
+github.com/go-andiamo/aitch v1.4.4/go.mod h1:MRKizCFJiZ4Q0ltZxKUg44+M6wEm6iqilb71dML8TPI=
 github.com/go-andiamo/chioas v1.16.4 h1:aHtA3KLmfQfHRsGxjYPNjrD8cMR2uTncbjvcxY64B3Q=
 github.com/go-andiamo/chioas v1.16.4/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
 github.com/go-andiamo/splitter v1.2.5 h1:P3NovWMY2V14TJJSolXBvlOmGSZo3Uz+LtTl2bsV/eY=

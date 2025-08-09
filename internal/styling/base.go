@@ -9,6 +9,15 @@ html, body {
 	height: 100%;
 	margin: 0;
 }
+table {
+	border-collapse: collapse;
+}
+.lr {
+    margin-top: 4px;
+    float: left;
+    width: 100%;
+    text-align: right;
+}
 body {
 	display: flex;
 	flex-direction: column;
@@ -35,6 +44,34 @@ header.navigation {
 	color: var(--nav-text-color);
 	background-color: var(--nav-bg-color);
 	border-bottom: 1px solid var(--nav-border-color);
+	position: relative;
+	overflow: visible;
+}
+header.navigation details {
+	background-color: inherit;
+    border: 1px solid var(--nav-border-color);
+    border-radius: 4px;
+    padding: 2px 4px 2px 4px;
+}
+header.navigation details[open] {
+	color: var(--nav-opened-text-color, var(--nav-text-color));
+	background-color: var(--nav-opened-bg-color, var(--nav-bg-color));
+    border: 1px solid black;
+    border-radius: 4px 4px 0 0;
+    z-index: 1000;
+}
+header.navigation details .content {
+    position: absolute;
+	border-radius: 0 4px 4px 4px;
+    border: 1px solid var(--nav-border-color);
+    background-color: var(--nav-bg-color);
+	color: var(--nav-text-color);
+    margin-left: -5px;
+	margin-top: 2px;
+	padding: 4px;
+}
+details summary {
+	cursor: pointer;
 }
 footer {
 	font-family: var(--ftr-font-family,sans-serif),sans-serif;
@@ -65,7 +102,7 @@ main {
 	display: inline-block;
 	vertical-align: middle;
 }
-span.method {
+.method {
 	color: var(--methods-text-color);
 	background-color: var(--methods-bg-color);
 	border: 1px solid var(--methods-border-color);
@@ -74,32 +111,35 @@ span.method {
 	border-radius: 4px;
 	margin-right: 4px;
 }
-span.method.get {
+button.method {
+	margin-right: 0;
+}
+.method.get {
 	color: var(--methods-get-text-color);
 	background-color: var(--methods-get-bg-color);
 	border: 1px solid var(--methods-get-border-color);
 }
-span.method.delete {
+.method.delete {
 	color: var(--methods-delete-text-color);
 	background-color: var(--methods-delete-bg-color);
 	border: 1px solid var(--methods-delete-border-color);
 }
-span.method.put {
+.method.put {
 	color: var(--methods-put-text-color);
 	background-color: var(--methods-put-bg-color);
 	border: 1px solid var(--methods-put-border-color);
 }
-span.method.post {
+.method.post {
 	color: var(--methods-post-text-color);
 	background-color: var(--methods-post-bg-color);
 	border: 1px solid var(--methods-post-border-color);
 }
-span.method.patch {
+.method.patch {
 	color: var(--methods-patch-text-color);
 	background-color: var(--methods-patch-bg-color);
 	border: 1px solid var(--methods-patch-border-color);
 }
-span.method.options {
+.method.options {
 	color: var(--methods-options-text-color);
 	background-color: var(--methods-options-bg-color);
 	border: 1px solid var(--methods-options-border-color);
@@ -117,6 +157,35 @@ h1,h2,h3,h4,h5,h6 {
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: text-bottom;
+}
+.inline-dropdown {
+	margin-left: 1em;
+	display: inline-flex;
+}
+` + queryParamsCss
+
+const queryParamsCss = `
+details.qps input, details.qps button, details.qps select {
+	vertical-align: middle;
+}
+table.qps th, table.qps td {
+    border: 1px solid var(--nav-border-color);
+    padding: 2px;
+    text-wrap: nowrap;
+}
+table.qps th {
+	text-align: right;
+}
+table.qps td input {
+    width: 20em;
+    border: none;
+    font-size: 100%;
+    min-height: 1.5em;
+    padding: 0 3px;
+}
+.navigation details.qps select {
+    font-weight: bold;
+    font-size: 100%;
 }
 `
 

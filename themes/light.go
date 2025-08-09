@@ -17,8 +17,13 @@ var Light = Theme{
 	Navigation: ThemeItem{
 		TextColor:       "black",
 		BackgroundColor: "white",
-		BorderColor:     "#eee",
+		BorderColor:     "#aaa",
 		FontFamily:      "Open Sans",
+		Opened: Coloring{
+			TextColor:       "black",
+			BackgroundColor: "#47AFE8",
+			BorderColor:     "#aaa",
+		},
 	},
 	Footer: ThemeItem{
 		TextColor:       "black",
