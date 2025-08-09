@@ -29,7 +29,7 @@ func TestBrowser_Write(t *testing.T) {
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
-	r := httptest.NewRequest(http.MethodGet, "http://localhost/myapi/pets/", nil)
+	r := httptest.NewRequest(http.MethodGet, "http://localhost/myapi/pets?search=fooo", nil)
 	item := []struct {
 		Name string `json:"name"`
 		Age  int    `json:"age"`
@@ -63,6 +63,12 @@ var petstoreDefinition = chioas.Definition{
 					Methods: chioas.Methods{
 						http.MethodGet: {
 							Description: "Get pets",
+							QueryParams: chioas.QueryParams{
+								{
+									Name:        "search",
+									Description: "Search for pet(s)",
+								},
+							},
 						},
 						http.MethodPost: {
 							Description: "Add pet",

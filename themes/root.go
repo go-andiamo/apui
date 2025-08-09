@@ -19,7 +19,7 @@ var RootTheme = Theme{
 	Navigation: ThemeItem{
 		TextColor:       "black",
 		BackgroundColor: "white",
-		BorderColor:     "#eee",
+		BorderColor:     "#aaa",
 		FontFamily:      "sans-serif",
 		FontSize:        "initial",
 	},
