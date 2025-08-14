@@ -32,6 +32,7 @@ const expectedRootVars = `:root {
 	--nav-font-family: sans-serif;
 	--nav-font-size: initial;
 	--nav-link-text-color: rgb(0,0,238);
+	--nav-disabled-text-color: #aaa;
 	--ftr-text-color: black;
 	--ftr-bg-color: #eee;
 	--ftr-border-color: #aaa;

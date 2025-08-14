@@ -25,6 +25,7 @@ var RootTheme = Theme{
 		FontFamily:      "sans-serif",
 		FontSize:        "initial",
 		LinkTextColor:   "rgb(0,0,238)",
+		DisabledColor:   "#aaa",
 	},
 	Footer: ThemeItem{
 		TextColor:       "black",

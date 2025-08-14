@@ -13,13 +13,14 @@ import (
 )
 
 type Browser struct {
-	template     *aitch.Template
-	definition   *chioas.Definition
-	jsonRenderer aitch.Node
-	showHeader   bool
-	showFooter   bool
-	headNodes    []aitch.Node
-	defaultTheme string
+	template       *aitch.Template
+	definition     *chioas.Definition
+	jsonRenderer   aitch.Node
+	showHeader     bool
+	showFooter     bool
+	headNodes      []aitch.Node
+	defaultTheme   string
+	pagingDetector PagingDetector
 }
 
 func NewBrowser(options ...any) (*Browser, error) {
@@ -105,6 +106,8 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			b.showFooter = bool(option)
 		case DefaultTheme:
 			b.defaultTheme, _ = themes.NormalizeName(string(option))
+		case PagingDetector:
+			b.pagingDetector = option
 		}
 	}
 	if headerRenderer == nil {
@@ -184,6 +187,11 @@ func getContextRequest(ctx *context.Context) (*http.Request, bool) {
 		}
 	}
 	return nil, false
+}
+
+func getContextResponse(ctx *context.Context) (any, bool) {
+	r, ok := ctx.Data[keyResponse]
+	return r, ok
 }
 
 func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {
