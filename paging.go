@@ -76,7 +76,7 @@ func pagingParams(r *http.Request, pi PagingInfo, pg int) string {
 	} else {
 		params["page"] = []string{strconv.Itoa(pg)}
 	}
-	if pi.PageSize > 0 && pi.PageSizeParamName == "" {
+	if pi.PageSize > 0 && pi.PageSizeParamName != "" {
 		params[pi.PageSizeParamName] = []string{strconv.Itoa(pi.PageSize)}
 	}
 	return paramsBuild(params)

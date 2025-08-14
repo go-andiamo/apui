@@ -30,8 +30,8 @@ func TestBrowser_Write(t *testing.T) {
 		&testPagingDetector{PagingInfo{
 			FirstPage:         1,
 			LastPage:          10,
-			NextPage:          2,
-			PreviousPage:      -1,
+			NextPage:          3,
+			PreviousPage:      1,
 			PageSize:          10,
 			PageSizeParamName: "pageSize",
 			ShowDisabled:      true,
