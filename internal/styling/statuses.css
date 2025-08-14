@@ -1,0 +1,34 @@
+.status {
+    color: var(--statuses-text-color);
+    background-color: var(--statuses-bg-color);
+    border: 1px solid var(--statuses-border-color);
+    font-family: var(--statuses-font-family,sans-serif),sans-serif;
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+.status.x1xx {
+    color: var(--statuses-1xx-text-color);
+    background-color: var(--statuses-1xx-bg-color);
+    border: 1px solid var(--statuses-1xx-border-color);
+}
+.status.x2xx {
+    color: var(--statuses-2xx-text-color);
+    background-color: var(--statuses-2xx-bg-color);
+    border: 1px solid var(--statuses-2xx-border-color);
+}
+.status.x3xx {
+    color: var(--statuses-3xx-text-color);
+    background-color: var(--statuses-3xx-bg-color);
+    border: 1px solid var(--statuses-3xx-border-color);
+}
+.status.x4xx {
+    color: var(--statuses-4xx-text-color);
+    background-color: var(--statuses-4xx-bg-color);
+    border: 1px solid var(--statuses-4xx-border-color);
+}
+.status.x5xx {
+    color: var(--statuses-5xx-text-color);
+    background-color: var(--statuses-5xx-bg-color);
+    border: 1px solid var(--statuses-5xx-border-color);
+}

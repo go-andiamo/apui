@@ -1,6 +1,7 @@
 package themes
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -8,6 +9,7 @@ import (
 func TestRootThemeVars(t *testing.T) {
 	output, err := RootTheme.buildVars()
 	require.NoError(t, err)
+	fmt.Println(string(output))
 	require.Equal(t, expectedRootVars, string(output))
 }
 
@@ -17,26 +19,31 @@ const expectedRootVars = `:root {
 	--body-border-color: #eee;
 	--body-font-family: sans-serif;
 	--body-font-size: initial;
+	--body-link-text-color: rgb(0,0,238);
 	--hdr-text-color: white;
 	--hdr-bg-color: #464748;
 	--hdr-border-color: #eee;
 	--hdr-font-family: sans-serif;
 	--hdr-font-size: initial;
+	--hdr-link-text-color: rgb(0,0,238);
 	--nav-text-color: black;
 	--nav-bg-color: white;
-	--nav-border-color: #eee;
+	--nav-border-color: #aaa;
 	--nav-font-family: sans-serif;
 	--nav-font-size: initial;
+	--nav-link-text-color: rgb(0,0,238);
 	--ftr-text-color: black;
 	--ftr-bg-color: #eee;
 	--ftr-border-color: #aaa;
 	--ftr-font-family: sans-serif;
 	--ftr-font-size: 75%;
+	--ftr-link-text-color: rgb(0,0,238);
 	--main-text-color: black;
 	--main-bg-color: white;
 	--main-border-color: #eee;
 	--main-font-family: sans-serif;
 	--main-font-size: initial;
+	--main-link-text-color: rgb(0,0,238);
 	--json-text-color: black;
 	--json-bg-color: #eee;
 	--json-border-color: #ddd;
@@ -66,4 +73,23 @@ const expectedRootVars = `:root {
 	--methods-options-text-color: black;
 	--methods-options-bg-color: #ddd;
 	--methods-options-border-color: transparent;
+	--statuses-text-color: black;
+	--statuses-bg-color: white;
+	--statuses-border-color: black;
+	--statuses-font-family: sans-serif;
+	--statuses-1xx-text-color: black;
+	--statuses-1xx-bg-color: #d0e8ff;
+	--statuses-1xx-border-color: black;
+	--statuses-2xx-text-color: black;
+	--statuses-2xx-bg-color: #d4f4d3;
+	--statuses-2xx-border-color: black;
+	--statuses-3xx-text-color: black;
+	--statuses-3xx-bg-color: #f9f3a1;
+	--statuses-3xx-border-color: black;
+	--statuses-4xx-text-color: black;
+	--statuses-4xx-bg-color: #ffdb99;
+	--statuses-4xx-border-color: black;
+	--statuses-5xx-text-color: black;
+	--statuses-5xx-bg-color: #ffcccb;
+	--statuses-5xx-border-color: black;
 }`

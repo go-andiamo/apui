@@ -1,0 +1,147 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+table {
+    border-collapse: collapse;
+}
+.lr {
+    margin-top: 4px;
+    float: left;
+    width: 100%;
+    text-align: right;
+}
+.ll {
+    margin-top: 4px;
+    float: left;
+    width: 100%;
+    text-align: left;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--body-font-family,sans-serif),sans-serif;
+    font-size: var(--body-font-size);
+    color: var(--body-text-color);
+    background-color: var(--body-bg-color);
+}
+body a {
+    color: var(--body-link-text-color);
+}
+body select, body input, body button {
+    color: var(--body-text-color);
+    background-color: var(--body-bg-color);
+}
+header, footer {
+    padding: 0 4px 0 4px;
+    flex: 0 0 auto;
+}
+header.header {
+    font-family: var(--hdr-font-family,sans-serif),sans-serif;
+    font-size: var(--hdr-font-size);
+    color: var(--hdr-text-color);
+    background-color: var(--hdr-bg-color);
+    border-bottom: 1px solid var(--hdr-border-color);
+}
+header.header a {
+    color: var(--hdr-link-text-color, var(--body-link-text-color));
+}
+header.header select, body input, body button {
+    color: var(--hdr-text-color);
+    background-color: var(--hdr-bg-color);
+}
+header.navigation {
+    padding: 4px 4px 4px 4px;
+    font-family: var(--nav-font-family,sans-serif),sans-serif;
+    font-size: var(--nav-font-size);
+    color: var(--nav-text-color);
+    background-color: var(--nav-bg-color);
+    border-bottom: 1px solid var(--nav-border-color);
+    position: relative;
+    overflow: visible;
+}
+header.navigation a {
+    color: var(--nav-link-text-color, var(--body-link-text-color));
+}
+header.navigation select, body input, body button {
+    color: var(--nav-text-color);
+    background-color: var(--nav-bg-color);
+}
+header.navigation details {
+    background-color: inherit;
+    border: 1px solid var(--nav-border-color);
+    border-radius: 4px;
+    padding: 2px 4px 2px 4px;
+}
+header.navigation details[open] {
+    color: var(--nav-opened-text-color, var(--nav-text-color));
+    background-color: var(--nav-opened-bg-color, var(--nav-bg-color));
+    border: 1px solid black;
+    border-radius: 4px 4px 0 0;
+    z-index: 1000;
+}
+header.navigation details .content {
+    position: absolute;
+    border-radius: 0 4px 4px 4px;
+    border: 1px solid var(--nav-dropdown-border-color, var(--nav-border-color));
+    background-color: var(--nav-dropdown-bg-color, var(--nav-bg-color));
+    color: var(--nav-dropdown-text-color, var(--nav-text-color));
+    margin-left: -5px;
+    margin-top: 2px;
+    padding: 4px;
+}
+details summary {
+    cursor: pointer;
+}
+footer {
+    font-family: var(--ftr-font-family,sans-serif),sans-serif;
+    font-size: var(--ftr-font-size);
+    color: var(--ftr-text-color);
+    background-color: var(--ftr-bg-color);
+    border-top: 1px solid var(--ftr-border-color);
+    padding: 4px 4px 4px 4px;
+}
+footer a {
+    color: var(--ftr-link-text-color, var(--body-link-text-color));
+}
+footer select, body input, body button {
+    color: var(--ftr-text-color);
+    background-color: var(--ftr-bg-color);
+}
+main {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 4px 4px 4px 4px;
+    font-family: var(--main-font-family,sans-serif),sans-serif;
+    font-size: var(--main-font-size);
+    color: var(--main-text-color);
+    background-color: var(--main-bg-color);
+}
+main a {
+    color: var(--main-link-text-color, var(--body-link-text-color));
+}
+main select, body input, body button {
+    color: var(--main-text-color);
+    background-color: var(--main-bg-color);
+}
+.small {
+    font-size: small;
+}
+h1,h2,h3,h4,h5,h6 {
+    margin-block-start: 0.5rem;
+    margin-block-end: 0.5rem;
+}
+.description {
+    font-style: italic;
+    margin-left: 1em;
+    display: inline-block;
+    max-width: 15em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: text-bottom;
+}
+.inline-dropdown {
+    margin-left: 1em;
+    display: inline-flex;
+}

@@ -1,0 +1,22 @@
+details.qps input, details.qps button, details.qps select {
+    vertical-align: middle;
+}
+table.qps th, table.qps td {
+    border: 1px solid var(--nav-border-color);
+    padding: 2px;
+    text-wrap: nowrap;
+}
+table.qps th {
+    text-align: right;
+}
+table.qps td input {
+    width: 20em;
+    border: none;
+    font-size: 100%;
+    min-height: 1.5em;
+    padding: 0 3px;
+}
+.navigation details.qps select {
+    font-weight: bold;
+    font-size: 100%;
+}

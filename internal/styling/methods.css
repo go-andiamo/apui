@@ -1,0 +1,42 @@
+.method {
+    color: var(--methods-text-color);
+    background-color: var(--methods-bg-color);
+    border: 1px solid var(--methods-border-color);
+    font-family: var(--methods-font-family,sans-serif),sans-serif;
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+button.method {
+    margin-right: 0;
+}
+.method.get {
+    color: var(--methods-get-text-color);
+    background-color: var(--methods-get-bg-color);
+    border: 1px solid var(--methods-get-border-color);
+}
+.method.delete {
+    color: var(--methods-delete-text-color);
+    background-color: var(--methods-delete-bg-color);
+    border: 1px solid var(--methods-delete-border-color);
+}
+.method.put {
+    color: var(--methods-put-text-color);
+    background-color: var(--methods-put-bg-color);
+    border: 1px solid var(--methods-put-border-color);
+}
+.method.post {
+    color: var(--methods-post-text-color);
+    background-color: var(--methods-post-bg-color);
+    border: 1px solid var(--methods-post-border-color);
+}
+.method.patch {
+    color: var(--methods-patch-text-color);
+    background-color: var(--methods-patch-bg-color);
+    border: 1px solid var(--methods-patch-border-color);
+}
+.method.options {
+    color: var(--methods-options-text-color);
+    background-color: var(--methods-options-bg-color);
+    border: 1px solid var(--methods-options-border-color);
+}
