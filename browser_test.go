@@ -1,6 +1,7 @@
 package apui
 
 import (
+	"github.com/go-andiamo/aitch/html"
 	"github.com/go-andiamo/apui/themes"
 	"github.com/go-andiamo/chioas"
 	"github.com/stretchr/testify/require"
@@ -26,6 +27,16 @@ func TestBrowser_Write(t *testing.T) {
 		themes.Light, themes.Dark,
 		DefaultTheme("Dark"),
 		ShowHeader(true), ShowFooter(true),
+		&testPagingDetector{PagingInfo{
+			FirstPage:         1,
+			LastPage:          10,
+			NextPage:          2,
+			PreviousPage:      -1,
+			PageSize:          10,
+			PageSizeParamName: "pageSize",
+			ShowDisabled:      true,
+			PreNode:           html.Span(nbsp, "Paging: "),
+		}, true},
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
@@ -145,6 +156,15 @@ var petstoreDefinition = chioas.Definition{
 			},
 		},
 	},
+}
+
+type testPagingDetector struct {
+	pi PagingInfo
+	ok bool
+}
+
+func (t *testPagingDetector) IsPaged(response any, req *http.Request, def *chioas.Path) (PagingInfo, bool) {
+	return t.pi, t.ok
 }
 
 func TestPetstoreYaml(t *testing.T) {

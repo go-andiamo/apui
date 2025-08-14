@@ -17,7 +17,10 @@ var statuses []byte
 //go:embed query_params.css
 var queryParams []byte
 
+//go:embed pagination.css
+var pagination []byte
+
 //go:embed assoc_methods.css
 var assocMethods []byte
 
-var BaseCssNode = html.StyleElement(base, methods, statuses, queryParams, assocMethods)
+var BaseCssNode = html.StyleElement(base, methods, statuses, queryParams, pagination, assocMethods)

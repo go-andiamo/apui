@@ -1,0 +1,18 @@
+.navigation .paging-btn {
+    display: inline-block;
+    border: 1px solid var(--nav-border-color);
+    border-radius: 4px;
+    padding: 0 2px 0 2px;
+    margin-left: 0.5em;
+}
+.navigation .paging-btn svg {
+    fill: var(--nav-link-text-color, var(--nav-text-color));
+    height: 1.5em;
+    vertical-align: middle;
+}
+.navigation .paging-btn[disabled] svg {
+    fill: var(--nav-disabled-text-color, var(--nav-text-color));
+    width: auto;
+    height: 1.5em;
+    vertical-align: middle;
+}

@@ -45,6 +45,7 @@ type NavigationTheme struct {
 	FontFamily      string
 	FontSize        string
 	LinkTextColor   string
+	DisabledColor   string
 	Opened          Coloring // only used for Navigation
 	Dropdown        Coloring // only used for Navigation
 }
@@ -159,6 +160,7 @@ func (t NavigationTheme) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "font-family", t.FontFamily, buf)
 	writeVar(part, "font-size", t.FontSize, buf)
 	writeVar(part, "link-text-color", t.LinkTextColor, buf)
+	writeVar(part, "disabled-text-color", t.DisabledColor, buf)
 	writeVar(part, "opened-text-color", t.Opened.TextColor, buf)
 	writeVar(part, "opened-bg-color", t.Opened.BackgroundColor, buf)
 	writeVar(part, "opened-border-color", t.Opened.BorderColor, buf)
