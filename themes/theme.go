@@ -14,11 +14,12 @@ type Theme struct {
 	Name       string
 	Body       ThemeItem
 	Header     ThemeItem
-	Navigation ThemeItem
+	Navigation NavigationTheme
 	Footer     ThemeItem
 	Main       ThemeItem
 	Json       JsonTheme
 	Methods    MethodsTheme
+	Statuses   StatusTheme
 	Links      []Link
 	AddCss     string
 }
@@ -34,7 +35,18 @@ type ThemeItem struct {
 	BorderColor     string
 	FontFamily      string
 	FontSize        string
+	LinkTextColor   string
+}
+
+type NavigationTheme struct {
+	TextColor       string
+	BackgroundColor string
+	BorderColor     string
+	FontFamily      string
+	FontSize        string
+	LinkTextColor   string
 	Opened          Coloring // only used for Navigation
+	Dropdown        Coloring // only used for Navigation
 }
 
 type JsonTheme struct {
@@ -57,6 +69,18 @@ type MethodsTheme struct {
 	Post            Coloring
 	Patch           Coloring
 	Options         Coloring
+}
+
+type StatusTheme struct {
+	TextColor       string
+	BackgroundColor string
+	BorderColor     string
+	FontFamily      string
+	OneXX           Coloring
+	TwoXX           Coloring
+	ThreeXX         Coloring
+	FourXX          Coloring
+	FiveXX          Coloring
 }
 
 type Coloring struct {
@@ -114,6 +138,7 @@ func (t Theme) buildVars() ([]byte, error) {
 	t.Main.buildVars("main", buf)
 	t.Json.buildVars("json", buf)
 	t.Methods.buildVars("methods", buf)
+	t.Statuses.buildVars("statuses", buf)
 	buf.WriteString("}")
 	return buf.Bytes(), nil
 }
@@ -124,11 +149,22 @@ func (t ThemeItem) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "border-color", t.BorderColor, buf)
 	writeVar(part, "font-family", t.FontFamily, buf)
 	writeVar(part, "font-size", t.FontSize, buf)
-	if part == "nav" {
-		writeVar(part, "opened-text-color", t.Opened.TextColor, buf)
-		writeVar(part, "opened-bg-color", t.Opened.BackgroundColor, buf)
-		writeVar(part, "opened-border-color", t.Opened.TextColor, buf)
-	}
+	writeVar(part, "link-text-color", t.LinkTextColor, buf)
+}
+
+func (t NavigationTheme) buildVars(part string, buf *bytes.Buffer) {
+	writeVar(part, "text-color", t.TextColor, buf)
+	writeVar(part, "bg-color", t.BackgroundColor, buf)
+	writeVar(part, "border-color", t.BorderColor, buf)
+	writeVar(part, "font-family", t.FontFamily, buf)
+	writeVar(part, "font-size", t.FontSize, buf)
+	writeVar(part, "link-text-color", t.LinkTextColor, buf)
+	writeVar(part, "opened-text-color", t.Opened.TextColor, buf)
+	writeVar(part, "opened-bg-color", t.Opened.BackgroundColor, buf)
+	writeVar(part, "opened-border-color", t.Opened.BorderColor, buf)
+	writeVar(part, "dropdown-text-color", t.Dropdown.TextColor, buf)
+	writeVar(part, "dropdown-bg-color", t.Dropdown.BackgroundColor, buf)
+	writeVar(part, "dropdown-border-color", t.Dropdown.BorderColor, buf)
 }
 
 func (t JsonTheme) buildVars(part string, buf *bytes.Buffer) {
@@ -164,6 +200,28 @@ func (t MethodsTheme) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part+"-options", "text-color", t.Options.TextColor, buf)
 	writeVar(part+"-options", "bg-color", t.Options.BackgroundColor, buf)
 	writeVar(part+"-options", "border-color", t.Options.BorderColor, buf)
+}
+
+func (t StatusTheme) buildVars(part string, buf *bytes.Buffer) {
+	writeVar(part, "text-color", t.TextColor, buf)
+	writeVar(part, "bg-color", t.BackgroundColor, buf)
+	writeVar(part, "border-color", t.BorderColor, buf)
+	writeVar(part, "font-family", t.FontFamily, buf)
+	writeVar(part+"-1xx", "text-color", t.OneXX.TextColor, buf)
+	writeVar(part+"-1xx", "bg-color", t.OneXX.BackgroundColor, buf)
+	writeVar(part+"-1xx", "border-color", t.OneXX.BorderColor, buf)
+	writeVar(part+"-2xx", "text-color", t.TwoXX.TextColor, buf)
+	writeVar(part+"-2xx", "bg-color", t.TwoXX.BackgroundColor, buf)
+	writeVar(part+"-2xx", "border-color", t.TwoXX.BorderColor, buf)
+	writeVar(part+"-3xx", "text-color", t.ThreeXX.TextColor, buf)
+	writeVar(part+"-3xx", "bg-color", t.ThreeXX.BackgroundColor, buf)
+	writeVar(part+"-3xx", "border-color", t.ThreeXX.BorderColor, buf)
+	writeVar(part+"-4xx", "text-color", t.FourXX.TextColor, buf)
+	writeVar(part+"-4xx", "bg-color", t.FourXX.BackgroundColor, buf)
+	writeVar(part+"-4xx", "border-color", t.FourXX.BorderColor, buf)
+	writeVar(part+"-5xx", "text-color", t.FiveXX.TextColor, buf)
+	writeVar(part+"-5xx", "bg-color", t.FiveXX.BackgroundColor, buf)
+	writeVar(part+"-5xx", "border-color", t.FiveXX.BorderColor, buf)
 }
 
 func writeVar(part string, name string, value string, buf *bytes.Buffer) {

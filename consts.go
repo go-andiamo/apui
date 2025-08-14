@@ -20,9 +20,14 @@ var (
 	elemSelect  = []byte("select")
 	elemOption  = []byte("option")
 	elemButton  = []byte("button")
+	elemEm      = []byte("em")
+	elemPre     = []byte("pre")
+	elemHr      = []byte("hr")
 )
 
 var (
 	classInlineDropdown = html.Class("inline-dropdown")
+	classLl             = html.Class("ll")
 	classLr             = html.Class("lr")
+	contentEditable     = html.ContentEditable(true)
 )

@@ -12,10 +12,8 @@ import (
 
 var (
 	queryParamsScripNode   = html.Script(scripts.QueryParamsScript)
-	queryParamsToggle      = html.OnToggle([]byte("(e => toggleQueryParams(e))(event)"))
 	queryParamsSummary     = html.Summary("Parameters")
 	queryParamsClass       = html.Class("qps")
-	queryParamContent      = html.Class("content")
 	queryParamsTableAtts   = []aitch.Node{html.Class("qps"), html.Id("qps")}
 	queryParamsAtts        = []aitch.Node{html.Class("qp")}
 	queryParamRemoveButton = html.Button(
@@ -58,42 +56,38 @@ func (b *Browser) writeQueryParams(ctx aitch.ImperativeContext, req *http.Reques
 	}
 	// has defined or current query params?...
 	if len(params) > 0 || len(curr) > 0 {
-		ctx.Start(elemSpan, false, classInlineDropdown)
-		ctx.Start(elemDetails, false, queryParamsToggle, queryParamsClass)
-		ctx.WriteNodes(queryParamsScripNode, queryParamsSummary)
-		ctx.Start(elemDiv, false, queryParamContent)
+		ctx.Start(elemSpan, false, classInlineDropdown).
+			Start(elemDetails, false, detailsOnToggle, queryParamsClass).
+			WriteNodes(queryParamsScripNode, queryParamsSummary).
+			Start(elemDiv, false, contentClass)
 		// existing params table...
 		ctx.Start(elemTable, false, queryParamsTableAtts...)
 		for _, c := range curr {
-			ctx.Start(elemTr, false, html.Title(titles[c.name]))
-			ctx.Start(elemTh, false, queryParamsAtts...)
-			ctx.WriteString(c.name)
-			ctx.End() //td
-			ctx.Start(elemTd, false, queryParamsAtts...)
-			ctx.Start(elemInput, true, html.Value(c.value))
-			ctx.End() //td
-			ctx.WriteNodes(queryParamRemoveTd)
-			ctx.End() //tr
+			ctx.Start(elemTr, false, html.Title(titles[c.name])).
+				WriteElement(elemTh, c.name, queryParamsAtts...).
+				Start(elemTd, false, queryParamsAtts...).
+				Start(elemInput, true, html.Value(c.value), html.Name(c.name)).
+				End(). //td
+				WriteNodes(queryParamRemoveTd).
+				End() //tr
 		}
 		ctx.End() //table
 		if len(params) > 0 {
 			// add query params select...
-			ctx.Start(elemDiv, false, classLr)
-			ctx.Start(elemSelect, false, queryParamSelectId)
+			ctx.Start(elemDiv, false, classLr).
+				Start(elemSelect, false, queryParamSelectId)
 			for _, p := range params {
-				ctx.Start(elemOption, false, html.Value(p.Name), html.Title(p.Description))
-				ctx.WriteString(p.Name)
-				ctx.End() //option
+				ctx.WriteElement(elemOption, p.Name, html.Value(p.Name), html.Title(p.Description))
 			}
-			ctx.End() //select
-			ctx.WriteNodes(addQueryParamButton)
-			ctx.End() //div
+			ctx.End(). //select
+					WriteNodes(addQueryParamButton).
+					End() //div
 		}
 		// get button...
-		ctx.Start(elemDiv, false, classLr)
-		ctx.Start(elemButton, false, queryParamsGetClass,
-			html.OnClick([]byte("queryParamsGet('"+req.URL.Path+"')")))
-		ctx.WriteString(req.Method)
-		ctx.EndAll()
+		ctx.Start(elemDiv, false, classLr).
+			WriteElement(elemButton, req.Method,
+				queryParamsGetClass,
+				html.OnClick([]byte("queryParamsGet('"+req.URL.Path+"')"))).
+			EndAll()
 	}
 }

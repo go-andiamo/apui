@@ -8,6 +8,7 @@ var RootTheme = Theme{
 		BorderColor:     "#eee",
 		FontFamily:      "sans-serif",
 		FontSize:        "initial",
+		LinkTextColor:   "rgb(0,0,238)",
 	},
 	Header: ThemeItem{
 		TextColor:       "white",
@@ -15,13 +16,15 @@ var RootTheme = Theme{
 		BorderColor:     "#eee",
 		FontFamily:      "sans-serif",
 		FontSize:        "initial",
+		LinkTextColor:   "rgb(0,0,238)",
 	},
-	Navigation: ThemeItem{
+	Navigation: NavigationTheme{
 		TextColor:       "black",
 		BackgroundColor: "white",
 		BorderColor:     "#aaa",
 		FontFamily:      "sans-serif",
 		FontSize:        "initial",
+		LinkTextColor:   "rgb(0,0,238)",
 	},
 	Footer: ThemeItem{
 		TextColor:       "black",
@@ -29,6 +32,7 @@ var RootTheme = Theme{
 		BorderColor:     "#aaa",
 		FontFamily:      "sans-serif",
 		FontSize:        "75%",
+		LinkTextColor:   "rgb(0,0,238)",
 	},
 	Main: ThemeItem{
 		TextColor:       "black",
@@ -36,6 +40,7 @@ var RootTheme = Theme{
 		BorderColor:     "#eee",
 		FontFamily:      "sans-serif",
 		FontSize:        "initial",
+		LinkTextColor:   "rgb(0,0,238)",
 	},
 	Json: JsonTheme{
 		TextColor:       "black",
@@ -82,6 +87,37 @@ var RootTheme = Theme{
 			TextColor:       "black",
 			BackgroundColor: "#ddd",
 			BorderColor:     "transparent",
+		},
+	},
+	Statuses: StatusTheme{
+		TextColor:       "black",
+		BackgroundColor: "white",
+		BorderColor:     "black",
+		FontFamily:      "sans-serif",
+		OneXX: Coloring{
+			TextColor:       "black",
+			BackgroundColor: "#d0e8ff",
+			BorderColor:     "black",
+		},
+		TwoXX: Coloring{
+			TextColor:       "black",
+			BackgroundColor: "#d4f4d3",
+			BorderColor:     "black",
+		},
+		ThreeXX: Coloring{
+			TextColor:       "black",
+			BackgroundColor: "#f9f3a1",
+			BorderColor:     "black",
+		},
+		FourXX: Coloring{
+			TextColor:       "black",
+			BackgroundColor: "#ffdb99",
+			BorderColor:     "black",
+		},
+		FiveXX: Coloring{
+			TextColor:       "black",
+			BackgroundColor: "#ffcccb",
+			BorderColor:     "black",
 		},
 	},
 }

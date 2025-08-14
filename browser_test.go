@@ -20,16 +20,16 @@ func TestNewBrowser(t *testing.T) {
 
 func TestBrowser_Write(t *testing.T) {
 	//theme := themes.Theme{Name: "Test", Navigation: themes.ThemeItem{BackgroundColor: "red"}}
-	theme := themes.Light
+	//theme := themes.Light
 	b, err := NewBrowser(
 		petstoreDefinition,
-		theme,
-		DefaultTheme("Light"),
+		themes.Light, themes.Dark,
+		DefaultTheme("Dark"),
 		ShowHeader(true), ShowFooter(true),
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
-	r := httptest.NewRequest(http.MethodGet, "http://localhost/myapi/pets?search=fooo", nil)
+	r := httptest.NewRequest(http.MethodGet, "http://localhost/myapi/pets?search=xxx", nil)
 	item := []struct {
 		Name string `json:"name"`
 		Age  int    `json:"age"`
@@ -74,6 +74,7 @@ var petstoreDefinition = chioas.Definition{
 							Description: "Add pet",
 							Request: &chioas.Request{
 								Required: true,
+								Ref:      "addPet",
 							},
 						},
 					},
@@ -87,10 +88,31 @@ var petstoreDefinition = chioas.Definition{
 									Description: "Update specific pet",
 									Request: &chioas.Request{
 										Required: true,
+										Schema: struct {
+											Name string `json:"name"`
+											Age  int    `json:"age"`
+											Type string `json:"type"`
+										}{},
 									},
 								},
 								http.MethodDelete: {
 									Description: "Delete specific pet",
+								},
+							},
+							Paths: chioas.Paths{
+								"/name": {
+									Methods: chioas.Methods{
+										http.MethodPut: {
+											Description: "Update pet name",
+											Request: &chioas.Request{
+												Required:  true,
+												SchemaRef: "updatePetName",
+											},
+										},
+										http.MethodGet: {
+											Description: "Get specific pet name",
+										},
+									},
 								},
 							},
 						},
@@ -99,4 +121,36 @@ var petstoreDefinition = chioas.Definition{
 			},
 		},
 	},
+	Components: &chioas.Components{
+		Schemas: chioas.Schemas{
+			{
+				Name: "updatePetName",
+				Properties: chioas.Properties{
+					{
+						Name:     "name",
+						Type:     "string",
+						Required: true,
+					},
+				},
+			},
+		},
+		Requests: chioas.CommonRequests{
+			"addPet": {
+				Description: "Add pet body",
+				Schema: struct {
+					Name string `json:"name"`
+					Age  int    `json:"age"`
+					Type string `json:"type"`
+				}{},
+			},
+		},
+	},
+}
+
+func TestPetstoreYaml(t *testing.T) {
+	f, err := os.Create("petstore.yaml")
+	require.NoError(t, err)
+	defer f.Close()
+	err = petstoreDefinition.WriteYaml(f)
+	require.NoError(t, err)
 }

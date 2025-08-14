@@ -1,11 +1,3 @@
-function toggleQueryParams(evt) {
-    if (evt.newState === "open") {
-        const focusable = evt.target.querySelector("input,button.select");
-        if (focusable) {
-            focusable.focus();
-        }
-    }
-}
 function removeQueryParam(evt) {
     const p = evt.target.parentElement.parentElement;
     document.getElementById('qps').deleteRow(p.rowIndex);
@@ -26,7 +18,7 @@ function addQueryParam() {
 function queryParamsGet(path) {
     let inps = document.querySelectorAll('table.qps input');
     let params = [];
-    inps.forEach(function(el) {
+    inps.forEach(el => {
         if (el.value !== '') {
             params.push(el.name+'='+encodeURIComponent(el.value));
         }
