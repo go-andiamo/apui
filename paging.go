@@ -53,7 +53,7 @@ func (b *Browser) writePagingLinks(ctx aitch.ImperativeContext, req *http.Reques
 		ctx.WriteElement(elemA, firstSvg, html.Class("paging-btn"), html.Disabled())
 	}
 	if pi.PreviousPage >= 0 {
-		ctx.WriteElement(elemA, prevSvg, html.Class("paging-btn", html.Href(path, pagingParams(req, pi, pi.PreviousPage))))
+		ctx.WriteElement(elemA, prevSvg, html.Class("paging-btn"), html.Href(path, pagingParams(req, pi, pi.PreviousPage)))
 	} else if pi.ShowDisabled {
 		ctx.WriteElement(elemA, prevSvg, html.Class("paging-btn"), html.Disabled())
 	}
