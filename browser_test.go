@@ -158,15 +158,6 @@ var petstoreDefinition = chioas.Definition{
 	},
 }
 
-type testPagingDetector struct {
-	pi PagingInfo
-	ok bool
-}
-
-func (t *testPagingDetector) IsPaged(response any, req *http.Request, def *chioas.Path) (PagingInfo, bool) {
-	return t.pi, t.ok
-}
-
 func TestPetstoreYaml(t *testing.T) {
 	f, err := os.Create("petstore.yaml")
 	require.NoError(t, err)

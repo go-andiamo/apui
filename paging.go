@@ -1,7 +1,6 @@
 package apui
 
 import (
-	"fmt"
 	"github.com/go-andiamo/aitch"
 	"github.com/go-andiamo/aitch/html"
 	"github.com/go-andiamo/aitch/svg"
@@ -76,8 +75,12 @@ func pagingParams(r *http.Request, pi PagingInfo, pg int) string {
 	} else {
 		params["page"] = []string{strconv.Itoa(pg)}
 	}
-	if pi.PageSize > 0 && pi.PageSizeParamName != "" {
-		params[pi.PageSizeParamName] = []string{strconv.Itoa(pi.PageSize)}
+	if pi.PageSizeParamName != "" {
+		if pi.PageSize > 0 {
+			params[pi.PageSizeParamName] = []string{strconv.Itoa(pi.PageSize)}
+		} else {
+			delete(params, pi.PageSizeParamName)
+		}
 	}
 	return paramsBuild(params)
 }
@@ -87,17 +90,19 @@ func paramsBuild(p url.Values) string {
 		return ""
 	}
 	var ps strings.Builder
+	ps.Grow(len(p) * 32)
 	first := true
 	for k, v := range p {
+		keyEscaped := url.QueryEscape(k)
 		if len(v) > 1 {
 			for _, iv := range v {
 				if !first {
 					ps.WriteString("&")
 				}
 				if iv == "" {
-					ps.WriteString(k)
+					ps.WriteString(keyEscaped)
 				} else {
-					ps.WriteString(fmt.Sprintf("%s=%s", k, urlEscape(iv)))
+					ps.WriteString(keyEscaped + "=" + url.QueryEscape(iv))
 				}
 				first = false
 			}
@@ -105,20 +110,15 @@ func paramsBuild(p url.Values) string {
 			if !first {
 				ps.WriteString("&")
 			}
-			if v[0] == "" {
-				ps.WriteString(k)
+			if len(v) == 0 || v[0] == "" {
+				ps.WriteString(keyEscaped)
 			} else {
-				ps.WriteString(fmt.Sprintf("%s=%s", k, urlEscape(v[0])))
+				ps.WriteString(keyEscaped + "=" + url.QueryEscape(v[0]))
 			}
 		}
 		first = false
 	}
 	return "?" + ps.String()
-}
-
-func urlEscape(s string) string {
-	s = url.QueryEscape(s)
-	return strings.ReplaceAll(strings.ReplaceAll(s, "%2A", "*"), "%2C", ",")
 }
 
 var (

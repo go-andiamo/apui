@@ -45,13 +45,15 @@ func (b *Browser) writeQueryParams(ctx aitch.ImperativeContext, req *http.Reques
 	})
 	var params chioas.QueryParams
 	titles := make(map[string]string)
-	if m, ok := def.Methods[req.Method]; ok {
-		params = m.QueryParams[:]
-		slices.SortStableFunc(params, func(a chioas.QueryParam, b chioas.QueryParam) int {
-			return strings.Compare(a.Name, b.Name)
-		})
-		for _, p := range params {
-			titles[p.Name] = p.Description
+	if def != nil {
+		if m, ok := def.Methods[req.Method]; ok {
+			params = m.QueryParams[:]
+			slices.SortStableFunc(params, func(a chioas.QueryParam, b chioas.QueryParam) int {
+				return strings.Compare(a.Name, b.Name)
+			})
+			for _, p := range params {
+				titles[p.Name] = p.Description
+			}
 		}
 	}
 	// has defined or current query params?...
