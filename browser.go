@@ -5,6 +5,7 @@ import (
 	"github.com/go-andiamo/aitch"
 	"github.com/go-andiamo/aitch/context"
 	"github.com/go-andiamo/aitch/html"
+	"github.com/go-andiamo/apui/internal/scripts"
 	"github.com/go-andiamo/apui/internal/styling"
 	"github.com/go-andiamo/apui/internal/templates"
 	"github.com/go-andiamo/apui/themes"
@@ -34,7 +35,7 @@ func NewBrowser(options ...any) (*Browser, error) {
 func (b *Browser) initialise(options ...any) (*Browser, error) {
 	var htmlTemplate string
 	htmlSet := false
-	headScripts := make([]aitch.Node, 0)
+	headScripts := []aitch.Node{html.Script(scripts.HeadScript)}
 	bodyScripts := []aitch.Node{jsonExpandCollapseScriptNode}
 	rootVarsNode, _ := themes.RootTheme.StyleNode()
 	styles := []aitch.Node{rootVarsNode, styling.BaseCssNode, jsonCssNode}
@@ -134,6 +135,8 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			nodeMap[k] = aitch.When(keyShowHeader, html.Header(html.Class(k), v))
 		case "footer":
 			nodeMap[k] = aitch.When(keyShowFooter, html.Footer(html.Class(k), v))
+		case "main":
+			nodeMap[k] = html.Main(v)
 		default:
 			if _, has := nodeMap[k]; has {
 				return nil, fmt.Errorf("invalid override node: %s", k)

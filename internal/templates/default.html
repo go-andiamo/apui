@@ -7,7 +7,7 @@
     {{styles .}}
     {{headScripts .}}
 </head>
-<body class="{{.Cargo.theme}}">
+<body class="{{.Cargo.theme}}" onfocusin="(e => focusing(e))(event)" onclick="(e => focusing(e))(event)">
 {{header .}}
 {{navigation .}}
 {{main .}}
