@@ -1,0 +1,77 @@
+header.header {
+    font-family: var(--hdr-font-family,sans-serif),sans-serif;
+    font-size: var(--hdr-font-size);
+    color: var(--hdr-text-color);
+    background-color: var(--hdr-bg-color);
+    border-bottom: 1px solid var(--hdr-border-color);
+}
+header.header a {
+    color: var(--hdr-link-text-color, var(--body-link-text-color));
+}
+header.header select, body input, body button {
+    color: var(--hdr-text-color);
+    background-color: var(--hdr-bg-color);
+}
+header.header div.title {
+    float: left;
+}
+header.header div.menus {
+    float: right;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+}
+header.header .dropdown {
+    z-index: 1000;
+}
+header.header .dropdown summary {
+    list-style: none;
+    cursor: pointer;
+}
+header.header .dropdown summary::-webkit-details-marker {
+    display: none;
+}
+header.header .dropdown summary {
+    display: inline-block;
+    padding: 4px 8px;
+    border: 1px solid var(--hdr-border-color);
+    border-radius: 4px;
+    background-color: var(--hdr-bg-color);
+    color: var(--hdr-text-color);
+    font-size: 18px;
+    line-height: 1;
+}
+header.header .dropdown[open] summary {
+    border-radius: 4px 4px 0 4px;
+    color: var(--hdr-opened-text-color, var(--hdr-text-color));
+    background-color: var(--hdr-opened-bg-color, var(--hdr-bg-color));
+    border: 1px solid var(--hdr-border-color);
+}
+header.header .dropdown summary::after {
+    content: "...";
+    font-weight: bold;
+}
+header.header .dropdown .dropdown-menu {
+    position: absolute;
+    right: 0;
+    padding: 4px;
+    color: var(--hdr-text-color);
+    background-color: var(--hdr-bg-color);
+    border: 1px solid var(--hdr-border-color);
+    height: calc(100dvh - 5em);
+    overflow-y: auto;
+    min-width: 20em;
+    margin-top: -1px;
+    margin-right: 4px;
+    border-radius: 4px 0 4px 4px;
+}
+header.header .dropdown .dropdown-menu hr {
+    margin-left: -4px;
+    margin-right: -4px;
+    border: none;
+    border-top: 1px solid var(--hdr-border-color);
+}
+header.header .dropdown .dropdown-menu select {
+    font-size: 100%;
+}

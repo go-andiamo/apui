@@ -7,8 +7,8 @@ import (
 //go:embed head.js
 var HeadScript []byte
 
-//go:embed navigation.js
-var NavigationScript []byte
+//go:embed header.js
+var HeaderScript []byte
 
 //go:embed query_params.js
 var QueryParamsScript []byte

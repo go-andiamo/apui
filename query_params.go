@@ -19,6 +19,7 @@ var (
 	queryParamRemoveButton = html.Button(
 		html.OnClick([]byte("(e => removeQueryParam(e))(event)")),
 		html.Title("Remove"),
+		html.Class("remove"),
 		"-")
 	queryParamRemoveTd  = html.Td(queryParamRemoveButton)
 	addQueryParamButton = html.Button(

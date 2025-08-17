@@ -15,8 +15,12 @@ var Dark = Theme{
 		BorderColor:     "#444",
 		FontFamily:      "Open Sans",
 		LinkTextColor:   "lightblue",
+		Opened: Coloring{
+			TextColor:       "white",
+			BackgroundColor: "#47AFE8",
+		},
 	},
-	Navigation: NavigationTheme{
+	Navigation: ThemeItem{
 		TextColor:       "white",
 		BackgroundColor: "#1e1e1e",
 		BorderColor:     "#555",

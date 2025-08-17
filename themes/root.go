@@ -18,7 +18,7 @@ var RootTheme = Theme{
 		FontSize:        "initial",
 		LinkTextColor:   "rgb(0,0,238)",
 	},
-	Navigation: NavigationTheme{
+	Navigation: ThemeItem{
 		TextColor:       "black",
 		BackgroundColor: "white",
 		BorderColor:     "#aaa",

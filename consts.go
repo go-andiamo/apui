@@ -12,6 +12,7 @@ var (
 	elemBr      = []byte("br")
 	elemDiv     = []byte("div")
 	elemDetails = []byte("details")
+	elemSummary = []byte("summary")
 	elemTable   = []byte("table")
 	elemTr      = []byte("tr")
 	elemTd      = []byte("td")
@@ -23,6 +24,8 @@ var (
 	elemEm      = []byte("em")
 	elemPre     = []byte("pre")
 	elemHr      = []byte("hr")
+	elemH3      = []byte("h3")
+	elemH4      = []byte("h4")
 )
 
 var (

@@ -13,8 +13,13 @@ var Light = Theme{
 		BackgroundColor: "#464748",
 		BorderColor:     "#eee",
 		FontFamily:      "Open Sans",
+		LinkTextColor:   "lightblue",
+		Opened: Coloring{
+			TextColor:       "white",
+			BackgroundColor: "#47AFE8",
+		},
 	},
-	Navigation: NavigationTheme{
+	Navigation: ThemeItem{
 		TextColor:       "black",
 		BackgroundColor: "white",
 		BorderColor:     "#aaa",

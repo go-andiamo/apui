@@ -14,7 +14,7 @@ type Theme struct {
 	Name       string
 	Body       ThemeItem
 	Header     ThemeItem
-	Navigation NavigationTheme
+	Navigation ThemeItem
 	Footer     ThemeItem
 	Main       ThemeItem
 	Json       JsonTheme
@@ -36,8 +36,12 @@ type ThemeItem struct {
 	FontFamily      string
 	FontSize        string
 	LinkTextColor   string
+	DisabledColor   string
+	Opened          Coloring
+	Dropdown        Coloring
 }
 
+/*
 type NavigationTheme struct {
 	TextColor       string
 	BackgroundColor string
@@ -46,9 +50,10 @@ type NavigationTheme struct {
 	FontSize        string
 	LinkTextColor   string
 	DisabledColor   string
-	Opened          Coloring // only used for Navigation
-	Dropdown        Coloring // only used for Navigation
+	Opened          Coloring
+	Dropdown        Coloring
 }
+*/
 
 type JsonTheme struct {
 	TextColor       string
@@ -151,8 +156,15 @@ func (t ThemeItem) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "font-family", t.FontFamily, buf)
 	writeVar(part, "font-size", t.FontSize, buf)
 	writeVar(part, "link-text-color", t.LinkTextColor, buf)
+	writeVar(part, "opened-text-color", t.Opened.TextColor, buf)
+	writeVar(part, "opened-bg-color", t.Opened.BackgroundColor, buf)
+	writeVar(part, "opened-border-color", t.Opened.BorderColor, buf)
+	writeVar(part, "dropdown-text-color", t.Dropdown.TextColor, buf)
+	writeVar(part, "dropdown-bg-color", t.Dropdown.BackgroundColor, buf)
+	writeVar(part, "dropdown-border-color", t.Dropdown.BorderColor, buf)
 }
 
+/*
 func (t NavigationTheme) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "text-color", t.TextColor, buf)
 	writeVar(part, "bg-color", t.BackgroundColor, buf)
@@ -168,6 +180,7 @@ func (t NavigationTheme) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "dropdown-bg-color", t.Dropdown.BackgroundColor, buf)
 	writeVar(part, "dropdown-border-color", t.Dropdown.BorderColor, buf)
 }
+*/
 
 func (t JsonTheme) buildVars(part string, buf *bytes.Buffer) {
 	writeVar(part, "text-color", t.TextColor, buf)
