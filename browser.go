@@ -13,6 +13,10 @@ import (
 	"net/http"
 )
 
+var (
+	detailsOnToggle = html.OnToggle([]byte("(e => toggleDetails(e))(event)"))
+)
+
 type Browser struct {
 	template       *aitch.Template
 	definition     *chioas.Definition
@@ -20,6 +24,7 @@ type Browser struct {
 	showHeader     bool
 	showFooter     bool
 	headNodes      []aitch.Node
+	themes         []themes.Theme
 	defaultTheme   string
 	pagingDetector PagingDetector
 }
@@ -77,6 +82,7 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			}
 		case themes.Theme:
 			if ts, err := option.StyleNode(); err == nil {
+				b.themes = append(b.themes, option)
 				styles = append(styles, ts)
 				for _, link := range option.Links {
 					if link.Href != "" {
@@ -112,7 +118,7 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 		}
 	}
 	if headerRenderer == nil {
-		headerRenderer = b.buildHeaderNode()
+		headerRenderer = aitch.Imperative(b.writeHeader)
 	}
 	if footerRenderer == nil {
 		footerRenderer = defaultFooterNode
@@ -156,21 +162,6 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 	}
 	b.template = template
 	return b, nil
-}
-
-func (b *Browser) buildHeaderNode() aitch.Node {
-	var title string
-	var version string
-	if b.definition != nil {
-		title, version = b.definition.Info.Title, b.definition.Info.Version
-	}
-	if title == "" {
-		title = "API"
-	}
-	if version == "" {
-		return html.H2(title)
-	}
-	return html.H2(title, html.Sup(html.Class("small"), " Version: ", version))
 }
 
 func (b *Browser) writeHead(ctx aitch.ImperativeContext) error {

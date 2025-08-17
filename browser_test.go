@@ -24,7 +24,7 @@ func TestBrowser_Write(t *testing.T) {
 	//theme := themes.Light
 	b, err := NewBrowser(
 		petstoreDefinition,
-		themes.Light, themes.Dark,
+		themes.Dark, themes.Light,
 		DefaultTheme("Dark"),
 		ShowHeader(true), ShowFooter(true),
 		&testPagingDetector{PagingInfo{
@@ -64,6 +64,7 @@ var petstoreDefinition = chioas.Definition{
 	},
 	Paths: chioas.Paths{
 		"/myapi": {
+			Tag: "Root",
 			Methods: chioas.Methods{
 				http.MethodGet: {
 					Description: "Get root discovery",
@@ -71,6 +72,7 @@ var petstoreDefinition = chioas.Definition{
 			},
 			Paths: chioas.Paths{
 				"/pets": {
+					Tag: "Pets",
 					Methods: chioas.Methods{
 						http.MethodGet: {
 							Description: "Get pets",

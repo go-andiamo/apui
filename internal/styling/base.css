@@ -36,59 +36,9 @@ header, footer {
     padding: 0 4px 0 4px;
     flex: 0 0 auto;
 }
-header.header {
-    font-family: var(--hdr-font-family,sans-serif),sans-serif;
-    font-size: var(--hdr-font-size);
-    color: var(--hdr-text-color);
-    background-color: var(--hdr-bg-color);
-    border-bottom: 1px solid var(--hdr-border-color);
-}
-header.header a {
-    color: var(--hdr-link-text-color, var(--body-link-text-color));
-}
-header.header select, body input, body button {
-    color: var(--hdr-text-color);
-    background-color: var(--hdr-bg-color);
-}
-header.navigation {
-    padding: 4px 4px 4px 4px;
-    font-family: var(--nav-font-family,sans-serif),sans-serif;
-    font-size: var(--nav-font-size);
-    color: var(--nav-text-color);
-    background-color: var(--nav-bg-color);
-    border-bottom: 1px solid var(--nav-border-color);
+header {
     position: relative;
     overflow: visible;
-}
-header.navigation a {
-    color: var(--nav-link-text-color, var(--body-link-text-color));
-}
-header.navigation select, body input, body button {
-    color: var(--nav-text-color);
-    background-color: var(--nav-bg-color);
-}
-header.navigation details {
-    background-color: inherit;
-    border: 1px solid var(--nav-border-color);
-    border-radius: 4px;
-    padding: 2px 4px 2px 4px;
-}
-header.navigation details[open] {
-    color: var(--nav-opened-text-color, var(--nav-text-color));
-    background-color: var(--nav-opened-bg-color, var(--nav-bg-color));
-    border: 1px solid black;
-    border-radius: 4px 4px 0 0;
-    z-index: 1000;
-}
-header.navigation details .content {
-    position: absolute;
-    border-radius: 0 4px 4px 4px;
-    border: 1px solid var(--nav-dropdown-border-color, var(--nav-border-color));
-    background-color: var(--nav-dropdown-bg-color, var(--nav-bg-color));
-    color: var(--nav-dropdown-text-color, var(--nav-text-color));
-    margin-left: -5px;
-    margin-top: 2px;
-    padding: 4px;
 }
 details summary {
     cursor: pointer;
