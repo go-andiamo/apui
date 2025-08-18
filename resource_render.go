@@ -63,6 +63,11 @@ func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {
 	return nil
 }
 
+const (
+	keyHeaders = "headers"
+	keyItems   = "items"
+)
+
 var (
 	classKeep       = html.Class("keep")
 	classRight      = html.Class("right")
@@ -70,7 +75,7 @@ var (
 	tableRenderNode = html.Table(
 		html.THead(
 			html.Tr(
-				aitch.IterateKey("headers", html.Th(func(ctx *context.Context) []byte {
+				aitch.IterateKey(keyHeaders, html.Th(func(ctx *context.Context) []byte {
 					return []byte(ctx.Cargo.(string))
 				})),
 				html.Th(
@@ -79,13 +84,13 @@ var (
 			),
 		),
 		html.TBody(
-			aitch.IterateKey("items", rowRenderNode),
+			aitch.IterateKey(keyItems, rowRenderNode),
 		),
 	)
 	rowRenderNode = html.Tr(
 		aitch.Imperative(func(ctx aitch.ImperativeContext) error {
 			row := ctx.Context().Data
-			if hdrs, ok := context.Get[[]string](ctx.Context().Parent, "headers"); ok {
+			if hdrs, ok := context.Get[[]string](ctx.Context().Parent, keyHeaders); ok {
 				for _, hdr := range hdrs {
 					v, present := row[hdr]
 					renderColumn(ctx, present, hdr, v, false)
@@ -175,7 +180,6 @@ func (b *Browser) writeMainEntity(ctx aitch.ImperativeContext, response any) {
 			}
 		}
 	}
-	_ = obj
 	if isObj {
 		open = nil
 	}
@@ -225,18 +229,9 @@ func (b *Browser) writeMainCollection(ctx aitch.ImperativeContext, response any)
 		}
 	}
 	slices.Sort(hdrs)
-	tableCtx := &context.Context{
-		Data: map[string]any{
-			"headers": hdrs,
-			"items":   c,
-		},
-		Writer: ctx.Context().Writer,
-		Parent: ctx.Context(),
-	}
-	_ = tableCtx
 	_ = tableRenderNode.Render(context.New(ctx.Context().Writer, map[string]any{
-		"headers": hdrs,
-		"items":   c,
+		keyHeaders: hdrs,
+		keyItems:   c,
 	}, nil))
 }
 
