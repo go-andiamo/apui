@@ -3,6 +3,7 @@ package apui
 import (
 	"github.com/go-andiamo/aitch"
 	"github.com/go-andiamo/aitch/html"
+	"github.com/go-andiamo/aitch/svg"
 	"github.com/go-andiamo/apui/internal/scripts"
 	"github.com/go-andiamo/apui/themes"
 	"github.com/go-andiamo/chioas"
@@ -14,6 +15,35 @@ import (
 var (
 	headerScript      = html.Script(scripts.HeaderScript)
 	headerThemeChange = html.OnChange([]byte("(e => themeSelect(e))(event)"))
+	logoSvg           = svg.Svg(
+		aitch.Attribute("xmlns", "http://www.w3.org/2000/svg"),
+		aitch.Attribute("viewBox", "0 0 128 128"),
+		svg.Rect(
+			svg.X(8), svg.Y(8), svg.Width(112), svg.Height(112),
+			svg.Rx(24), svg.Ry(24),
+			svg.Fill("none"), svg.Stroke("currentColor"), svg.StrokeWidth(10),
+		),
+		svg.G(
+			aitch.Attribute("transform", "translate(0, 7)"),
+			svg.Path(
+				svg.D("M54 28 C46 28, 42 36, 42 44 C42 52, 38 56, 34 56 C38 56, 42 60, 42 68 C42 76, 46 84, 54 84"),
+				svg.Fill("none"), svg.Stroke("currentColor"), svg.StrokeWidth(10),
+				svg.StrokeLineCap("round"), svg.StrokeLineJoin("round"),
+			),
+			svg.Path(
+				svg.D("M74 28 C82 28, 86 36, 86 44 C86 52, 90 56, 94 56 C90 56, 86 60, 86 68 C86 76, 82 84, 74 84"),
+				svg.Fill("none"), svg.Stroke("currentColor"), svg.StrokeWidth(10),
+				svg.StrokeLineCap("round"), svg.StrokeLineJoin("round"),
+			),
+			svg.Circle(
+				svg.Cx(64), svg.Cy(56), svg.R(6), svg.Fill("currentColor"),
+			),
+		),
+	)
+	logoSpan = html.Span(
+		html.Class("logo"),
+		logoSvg,
+	)
 )
 
 func (b *Browser) writeHeader(ctx aitch.ImperativeContext) error {
@@ -28,9 +58,9 @@ func (b *Browser) writeHeader(ctx aitch.ImperativeContext) error {
 	}
 	ctx.Start(elemDiv, false, html.Class("title"))
 	if version == "" {
-		ctx.WriteNodes(html.H2(title))
+		ctx.WriteNodes(html.H2(logoSpan, title))
 	} else {
-		ctx.WriteNodes(html.H2(title, html.Sup(html.Class("small"), " Version: ", version)))
+		ctx.WriteNodes(html.H2(logoSpan, title, html.Sup(html.Class("small"), " Version: ", version)))
 	}
 	ctx.End()
 	b.writeHeaderDropdown(ctx)
