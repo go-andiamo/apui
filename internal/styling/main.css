@@ -1,0 +1,57 @@
+main table {
+    border-collapse: collapse;
+}
+main td, main th {
+    border: 1px solid var(--main-border-color);
+    padding: 2px;
+    text-wrap: nowrap;
+}
+main th {
+    text-align: center;
+}
+main td.right, main th.right {
+    text-align: right;
+}
+main table details div.json {
+    max-width: 40em;
+}
+main span.null {
+    border: 1px solid var(--main-border-color);
+    display: inline-block;
+    font-family: monospace;
+}
+main table details summary {
+    border: 1px solid var(--main-border-color);
+    padding: 0 2px 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+main table details[open] summary {
+    border-radius: 4px 4px 0 0;
+    background-color: var(--json-bg-color);
+}
+main table details div.json, main > div > details > div.json {
+    border-color: var(--main-border-color);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+main > div {
+    margin-bottom: 0.5em;
+}
+main > div > details summary {
+    border: 1px solid var(--main-border-color);
+    padding: 0 2px 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+main table.tabular {
+    width: 100%;
+    margin-top: -1px;
+}
+main table.tabular th.value {
+    width: 80%;
+}
+main table.tabular div.json {
+    width: calc(100% - 6px);
+    max-width: none;
+}

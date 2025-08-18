@@ -18,22 +18,24 @@ var (
 )
 
 type Browser struct {
-	template       *aitch.Template
-	definition     *chioas.Definition
-	jsonRenderer   aitch.Node
-	showHeader     bool
-	showFooter     bool
-	headNodes      []aitch.Node
-	themes         []themes.Theme
-	defaultTheme   string
-	pagingDetector PagingDetector
+	template             *aitch.Template
+	definition           *chioas.Definition
+	jsonRenderer         aitch.Node
+	showHeader           bool
+	showFooter           bool
+	headNodes            []aitch.Node
+	themes               []themes.Theme
+	defaultTheme         string
+	pagingDetector       PagingDetector
+	resourceTypeDetector ResourceTypeDetector
 }
 
 func NewBrowser(options ...any) (*Browser, error) {
 	return (&Browser{
-		jsonRenderer: jsonRenderNode,
-		showHeader:   true,
-		showFooter:   true,
+		jsonRenderer:         jsonRenderNode,
+		showHeader:           true,
+		showFooter:           true,
+		resourceTypeDetector: defaultResourceTypeDetector,
 	}).initialise(options...)
 }
 
@@ -113,6 +115,8 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			b.showFooter = bool(option)
 		case DefaultTheme:
 			b.defaultTheme, _ = themes.NormalizeName(string(option))
+		case ResourceTypeDetector:
+			b.resourceTypeDetector = option
 		case PagingDetector:
 			b.pagingDetector = option
 		}
@@ -186,16 +190,6 @@ func getContextRequest(ctx *context.Context) (*http.Request, bool) {
 func getContextResponse(ctx *context.Context) (any, bool) {
 	r, ok := ctx.Data[keyResponse]
 	return r, ok
-}
-
-func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {
-	// todo this is just sample code...
-	jctx := &context.Context{
-		Cargo:  ctx.Context().Data["response"],
-		Writer: ctx.Context().Writer,
-		Parent: ctx.Context(),
-	}
-	return b.jsonRenderer.Render(jctx)
 }
 
 func (b *Browser) Write(w http.ResponseWriter, r *http.Request, response any, addCargo ...map[string]any) {

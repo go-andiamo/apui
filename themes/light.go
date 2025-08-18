@@ -40,7 +40,7 @@ var Light = Theme{
 	Main: ThemeItem{
 		TextColor:       "black",
 		BackgroundColor: "white",
-		BorderColor:     "#eee",
+		BorderColor:     "#333",
 		FontFamily:      "Open Sans",
 	},
 	Json: JsonTheme{

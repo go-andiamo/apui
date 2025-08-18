@@ -14,6 +14,8 @@ var (
 	elemDetails = []byte("details")
 	elemSummary = []byte("summary")
 	elemTable   = []byte("table")
+	elemTHead   = []byte("thead")
+	elemTBody   = []byte("tbody")
 	elemTr      = []byte("tr")
 	elemTd      = []byte("td")
 	elemTh      = []byte("th")

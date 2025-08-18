@@ -29,4 +29,7 @@ var pagination []byte
 //go:embed assoc_methods.css
 var assocMethods []byte
 
-var BaseCssNode = html.StyleElement(base, methods, statuses, header, navigation, queryParams, pagination, assocMethods)
+//go:embed main.css
+var main []byte
+
+var BaseCssNode = html.StyleElement(base, methods, statuses, header, navigation, queryParams, pagination, assocMethods, main)
