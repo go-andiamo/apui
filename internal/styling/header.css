@@ -75,3 +75,10 @@ header.header .dropdown .dropdown-menu hr {
 header.header .dropdown .dropdown-menu select {
     font-size: 100%;
 }
+header.header span.logo {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: bottom;
+    margin-right: 0.2em;
+}
