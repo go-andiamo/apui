@@ -1,7 +1,6 @@
 package apui
 
 import (
-	"github.com/go-andiamo/aitch/html"
 	"github.com/go-andiamo/apui/themes"
 	"github.com/go-andiamo/chioas"
 	"github.com/stretchr/testify/require"
@@ -22,9 +21,14 @@ func TestNewBrowser(t *testing.T) {
 func TestBrowser_Write(t *testing.T) {
 	//theme := themes.Theme{Name: "Test", Navigation: themes.ThemeItem{BackgroundColor: "red"}}
 	//theme := themes.Light
+	DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"$uri"}}
+	defer func() {
+		DefaultUriPropertyDetector = nil
+	}()
+
 	b, err := NewBrowser(
 		petstoreDefinition,
-		themes.Dark, themes.Light,
+		themes.Dark, themes.Light, themes.HighContrast,
 		DefaultTheme("Dark"),
 		ShowHeader(true), ShowFooter(true),
 		&testPagingDetector{PagingInfo{
@@ -35,21 +39,58 @@ func TestBrowser_Write(t *testing.T) {
 			PageSize:          10,
 			PageSizeParamName: "pageSize",
 			ShowDisabled:      true,
-			PreNode:           html.Span(nbsp, "Paging: "),
 		}, true},
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "http://localhost/myapi/pets?search=xxx", nil)
+	type obj struct {
+		Foo string `json:"foo"`
+		Bar int    `json:"bar"`
+	}
 	item := []struct {
-		Name string `json:"name"`
-		Age  int    `json:"age"`
+		Uri       string   `json:"$uri"`
+		Name      string   `json:"name"`
+		Age       int      `json:"age"`
+		Something *string  `json:"something"`
+		Object    *obj     `json:"obj,omitempty"`
+		Array     []string `json:"arr"`
 	}{
 		{
-			Name: "Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins Bilbo Baggins ",
+			Uri:  "/myapi/pets/123",
+			Name: "Bilbo Baggins",
 			Age:  42,
+			Object: &obj{
+				Foo: "foo",
+				Bar: 2,
+			},
+		},
+		{
+			Uri:   "/myapi/pets/456",
+			Name:  "Frodo Baggins",
+			Age:   42,
+			Array: []string{"foo", "bar"},
 		},
 	}
+	/*
+		item := struct {
+			Uri       string   `json:"$uri"`
+			Name      string   `json:"name"`
+			Age       int      `json:"age"`
+			Something *string  `json:"something"`
+			Object    *obj     `json:"obj,omitempty"`
+			Array     []string `json:"arr"`
+		}{
+			Uri:  "/myapi/pets/123",
+			Name: "Bilbo Baggins",
+			Age:  42,
+			Object: &obj{
+				Foo: "foo",
+				Bar: 2,
+			},
+			Array: []string{"foo", "bar"},
+		}
+	*/
 	b.Write(w, r, item)
 	out, err := io.ReadAll(w.Result().Body)
 	f, err := os.Create(t.Name() + ".html")

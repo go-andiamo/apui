@@ -48,14 +48,14 @@ var Dark = Theme{
 	Main: ThemeItem{
 		TextColor:       "white",
 		BackgroundColor: "#1e1e1e",
-		BorderColor:     "#444",
+		BorderColor:     "#666",
 		FontFamily:      "Open Sans",
 		LinkTextColor:   "lightblue",
 	},
 	Json: JsonTheme{
 		TextColor:       "white",
 		BackgroundColor: "#2d2d2d",
-		BorderColor:     "#555",
+		BorderColor:     "#666",
 		FontFamily:      "Google Sans Code",
 		FontSize:        "85%",
 		CollapsedMarker: Coloring{
