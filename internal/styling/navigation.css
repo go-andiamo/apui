@@ -36,3 +36,10 @@ header.navigation details .content {
     margin-top: 2px;
     padding: 4px;
 }
+header.navigation a.info {
+    margin-left: 0.5em;
+    display: inline-block;
+    vertical-align: text-top;
+    text-decoration: none;
+    color: var(--nav-link-text-color, var(--nav-text-color));
+}

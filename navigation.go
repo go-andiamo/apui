@@ -16,7 +16,7 @@ func (b *Browser) writeNavigation(ctx aitch.ImperativeContext) error {
 	var err error
 	if err = getMethodNode.Render(ctx.Context()); err == nil {
 		if req, ok := getContextRequest(ctx.Context()); ok {
-			def, defs, paths := b.findRequestDef(req)
+			def, defs, paths, defPaths := b.findRequestDef(req)
 			nodes := []aitch.Node{aitch.Text("/")}
 			for i, p := range paths {
 				if i == len(paths)-1 {
@@ -35,8 +35,14 @@ func (b *Browser) writeNavigation(ctx aitch.ImperativeContext) error {
 				}
 			}
 			if def != nil {
+				if b.docsPathDetector != nil {
+					if docsPath := b.docsPathDetector.ResolveDocsPath(req, defPaths); docsPath != "" {
+						nodes = append(nodes, html.A(html.Class("info"), html.Href(docsPath), html.Target("_blank"), aitch.Text([]byte("&#9432;"))))
+					}
+				}
 				if m, ok := def.Methods[req.Method]; ok && m.Description != "" {
-					nodes = append(nodes, html.Span(html.Class("description"), html.Title(m.Description), m.Description))
+					nodes = append(nodes, html.Span(html.Class("description"),
+						html.Title(m.Description), m.Description))
 				}
 			}
 			ctx.WriteNodes(nodes...)

@@ -20,7 +20,6 @@ var (
 type Browser struct {
 	template             *aitch.Template
 	definition           *chioas.Definition
-	jsonRenderer         aitch.Node
 	showHeader           bool
 	showFooter           bool
 	headNodes            []aitch.Node
@@ -28,14 +27,16 @@ type Browser struct {
 	defaultTheme         string
 	pagingDetector       PagingDetector
 	resourceTypeDetector ResourceTypeDetector
+	docsPathDetector     DocsPathDetector
+	logo                 aitch.Node
 }
 
 func NewBrowser(options ...any) (*Browser, error) {
 	return (&Browser{
-		jsonRenderer:         jsonRenderNode,
 		showHeader:           true,
 		showFooter:           true,
 		resourceTypeDetector: defaultResourceTypeDetector,
+		logo:                 logoSpan,
 	}).initialise(options...)
 }
 
@@ -82,6 +83,10 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 					styles = append(styles, html.StyleElement([]byte("\n"+option.Content)))
 				}
 			}
+		case AddHeadNode:
+			if option.Node != nil {
+				b.headNodes = append(b.headNodes, option.Node)
+			}
 		case themes.Theme:
 			if ts, err := option.StyleNode(); err == nil {
 				b.themes = append(b.themes, option)
@@ -99,11 +104,9 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 				return nil, err
 			}
 		case HeaderRenderer:
-			headerRenderer = option
+			headerRenderer = option.Node
 		case FooterRenderer:
-			footerRenderer = option
-		case JsonRenderer:
-			b.jsonRenderer = option
+			footerRenderer = option.Node
 		case TemplateNode:
 			if option.Node == nil {
 				return nil, fmt.Errorf("invalid template node (nil Node)")
@@ -115,10 +118,19 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			b.showFooter = bool(option)
 		case DefaultTheme:
 			b.defaultTheme, _ = themes.NormalizeName(string(option))
-		case ResourceTypeDetector:
-			b.resourceTypeDetector = option
-		case PagingDetector:
-			b.pagingDetector = option
+		case Logo:
+			b.logo = option.Node
+		default:
+			// interfaces...
+			if intf, ok := o.(ResourceTypeDetector); ok {
+				b.resourceTypeDetector = intf
+			}
+			if intf, ok := o.(PagingDetector); ok {
+				b.pagingDetector = intf
+			}
+			if intf, ok := o.(DocsPathDetector); ok {
+				b.docsPathDetector = intf
+			}
 		}
 	}
 	if headerRenderer == nil {
@@ -153,9 +165,6 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			}
 			nodeMap[k] = v
 		}
-	}
-	if b.jsonRenderer == nil {
-		b.jsonRenderer = jsonRenderNode
 	}
 	if !htmlSet {
 		htmlTemplate = templates.DefaultTemplate

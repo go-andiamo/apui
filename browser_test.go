@@ -19,8 +19,6 @@ func TestNewBrowser(t *testing.T) {
 }
 
 func TestBrowser_Write(t *testing.T) {
-	//theme := themes.Theme{Name: "Test", Navigation: themes.ThemeItem{BackgroundColor: "red"}}
-	//theme := themes.Light
 	DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"$uri"}}
 	defer func() {
 		DefaultUriPropertyDetector = nil
@@ -31,6 +29,7 @@ func TestBrowser_Write(t *testing.T) {
 		themes.Dark, themes.Light, themes.HighContrast,
 		DefaultTheme("Dark"),
 		ShowHeader(true), ShowFooter(true),
+		&testDocsPathDetector{},
 		&testPagingDetector{PagingInfo{
 			FirstPage:         1,
 			LastPage:          10,
@@ -97,6 +96,14 @@ func TestBrowser_Write(t *testing.T) {
 	defer f.Close()
 	f.Write(out)
 }
+
+type testDocsPathDetector struct{}
+
+func (t *testDocsPathDetector) ResolveDocsPath(r *http.Request, defPath []string) string {
+	return "/docs"
+}
+
+var _ DocsPathDetector = &testDocsPathDetector{}
 
 var petstoreDefinition = chioas.Definition{
 	Info: chioas.Info{

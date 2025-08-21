@@ -1,3 +1,21 @@
+(function() {
+    const theme = localStorage.getItem("theme");
+    if (theme) {
+        document.addEventListener("DOMContentLoaded", function () {
+            setTheme(theme);
+        });
+    }
+})();
+
+function setTheme(theme) {
+    document.body.classList.forEach(cls => {
+        if (cls.startsWith("theme-")) {
+            document.body.classList.remove(cls);
+        }
+    });
+    document.body.classList.add(theme);
+}
+
 function focusing(evt) {
     if (!evt.target.classList.contains("remove")) {
         let opened = document.querySelectorAll("details[open]:not(.keep)");
@@ -7,19 +25,6 @@ function focusing(evt) {
                 el.removeAttribute("open");
             });
         }
-
-        /*
-                let opened = document.querySelectorAll("details[open]:not(.keep)");
-                if (opened.length) {
-                    console.log("focusing", evt, opened);
-                }
-                let details = evt.target.closest("details");
-                if (!details) {
-                    document.querySelectorAll("details[open]:not(.keep)").forEach(el => {
-                        el.removeAttribute("open");
-                    });
-                }
-         */
     }
 }
 function toggleDetails(evt) {

@@ -254,5 +254,5 @@ func (b *Browser) writeMainUnknown(ctx aitch.ImperativeContext, response any) {
 		Writer: ctx.Context().Writer,
 		Parent: ctx.Context(),
 	}
-	_ = b.jsonRenderer.Render(jctx)
+	_ = jsonRenderNode.Render(jctx)
 }

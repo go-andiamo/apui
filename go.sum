@@ -7,6 +7,9 @@ github.com/go-andiamo/aitch v1.4.5 h1:AG8DVbBg/NtrbXxCIwnKNWUeMAlfZVp1PCzxmU3gGX
 github.com/go-andiamo/aitch v1.4.5/go.mod h1:MRKizCFJiZ4Q0ltZxKUg44+M6wEm6iqilb71dML8TPI=
 github.com/go-andiamo/chioas v1.16.4 h1:aHtA3KLmfQfHRsGxjYPNjrD8cMR2uTncbjvcxY64B3Q=
 github.com/go-andiamo/chioas v1.16.4/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
+github.com/go-andiamo/chioas v1.16.5/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
+github.com/go-andiamo/chioas v1.16.6 h1:4ScXH+t9bID8yYw0ru8Y7+S/4n1SEf5KW3LRFhTVQjI=
+github.com/go-andiamo/chioas v1.16.6/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
 github.com/go-andiamo/splitter v1.2.5 h1:P3NovWMY2V14TJJSolXBvlOmGSZo3Uz+LtTl2bsV/eY=
 github.com/go-andiamo/splitter v1.2.5/go.mod h1:8WHU24t9hcMKU5FXDQb1hysSEC/GPuivIp0uKY1J8gw=
 github.com/go-andiamo/urit v1.2.1 h1:5JHJb+TuzuGvXw9Y/LK/lQltCL2gpgHkCznI2vv9ZeY=

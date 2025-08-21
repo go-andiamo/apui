@@ -24,7 +24,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 			},
 		}
 		r := httptest.NewRequest("GET", "/myapi/pets", nil)
-		path, paths, parts := b.findRequestDef(r)
+		path, paths, parts, defPaths := b.findRequestDef(r)
 		require.NotNil(t, path)
 		require.Equal(t, "pets", path.Tag)
 		require.Len(t, paths, 2)
@@ -33,6 +33,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 		require.NotNil(t, paths[1])
 		require.Equal(t, "pets", paths[1].Tag)
 		require.Equal(t, []string{"myapi", "pets"}, parts)
+		require.Equal(t, []string{"myapi", "pets"}, defPaths)
 	})
 	t.Run("match path param", func(t *testing.T) {
 		b := &Browser{
@@ -55,7 +56,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 			},
 		}
 		r := httptest.NewRequest("GET", "/myapi/pets/123", nil)
-		path, paths, parts := b.findRequestDef(r)
+		path, paths, parts, defPaths := b.findRequestDef(r)
 		require.NotNil(t, path)
 		require.Equal(t, "pet", path.Tag)
 		require.Len(t, paths, 3)
@@ -66,6 +67,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 		require.NotNil(t, paths[2])
 		require.Equal(t, "pet", paths[2].Tag)
 		require.Equal(t, []string{"myapi", "pets", "123"}, parts)
+		require.Equal(t, []string{"myapi", "pets", "{id}"}, defPaths)
 	})
 	t.Run("match path param regex", func(t *testing.T) {
 		b := &Browser{
@@ -88,7 +90,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 			},
 		}
 		r := httptest.NewRequest("GET", "/myapi/pets/123", nil)
-		path, paths, parts := b.findRequestDef(r)
+		path, paths, parts, defPaths := b.findRequestDef(r)
 		require.NotNil(t, path)
 		require.Equal(t, "pet", path.Tag)
 		require.Len(t, paths, 3)
@@ -99,6 +101,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 		require.NotNil(t, paths[2])
 		require.Equal(t, "pet", paths[2].Tag)
 		require.Equal(t, []string{"myapi", "pets", "123"}, parts)
+		require.Equal(t, []string{"myapi", "pets", "{id}"}, defPaths)
 	})
 	t.Run("match path param with sub-path", func(t *testing.T) {
 		b := &Browser{
@@ -126,7 +129,7 @@ func TestBrowser_findRequestDef(t *testing.T) {
 			},
 		}
 		r := httptest.NewRequest("GET", "/myapi/pets/123/name", nil)
-		path, paths, parts := b.findRequestDef(r)
+		path, paths, parts, defPaths := b.findRequestDef(r)
 		require.NotNil(t, path)
 		require.Equal(t, "pet name", path.Tag)
 		require.Len(t, paths, 4)
@@ -139,26 +142,29 @@ func TestBrowser_findRequestDef(t *testing.T) {
 		require.NotNil(t, paths[3])
 		require.Equal(t, "pet name", paths[3].Tag)
 		require.Equal(t, []string{"myapi", "pets", "123", "name"}, parts)
+		require.Equal(t, []string{"myapi", "pets", "{id}", "name"}, defPaths)
 	})
 	t.Run("no definition", func(t *testing.T) {
 		b := &Browser{}
 		r := httptest.NewRequest("GET", "/example", nil)
-		path, paths, parts := b.findRequestDef(r)
+		path, paths, parts, defPaths := b.findRequestDef(r)
 		require.Nil(t, path)
 		require.Len(t, paths, 1)
 		require.Nil(t, paths[0])
 		require.Equal(t, []string{"example"}, parts)
+		require.Len(t, defPaths, 0)
 	})
 	t.Run("no match", func(t *testing.T) {
 		b := &Browser{
 			definition: &chioas.Definition{},
 		}
 		r := httptest.NewRequest("GET", "/myapi/pets", nil)
-		path, paths, parts := b.findRequestDef(r)
+		path, paths, parts, defPaths := b.findRequestDef(r)
 		require.Nil(t, path)
 		require.Len(t, paths, 2)
 		require.Nil(t, paths[0])
 		require.Nil(t, paths[1])
 		require.Equal(t, []string{"myapi", "pets"}, parts)
+		require.Len(t, defPaths, 0)
 	})
 }

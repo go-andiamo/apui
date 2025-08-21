@@ -1,8 +1,16 @@
+(function() {
+    const theme = localStorage.getItem("theme");
+    if (theme) {
+        document.addEventListener("DOMContentLoaded", function () {
+            const select = document.getElementById("theme-select");
+            if (select) {
+                select.value = theme;
+            }
+        });
+    }
+})();
+
 function themeSelect(evt) {
-    document.body.classList.forEach(cls => {
-        if (cls.startsWith("theme-")) {
-            document.body.classList.remove(cls);
-        }
-    });
-    document.body.classList.add(evt.target.value);
+    setTheme(evt.target.value);
+    localStorage.setItem("theme", evt.target.value);
 }
