@@ -77,11 +77,28 @@ func (a *api) DeletePet(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *api) GetCategories(w http.ResponseWriter, r *http.Request) {
+	if result, err := a.repo.ListCategories(r.Context()); err == nil {
+		a.writeResponse(w, r, result, http.StatusOK)
+	} else {
+		a.writeErrorResponse(w, r, err)
+	}
+}
+
+func (a *api) GetCategory(w http.ResponseWriter, r *http.Request) {
+	if result, err := a.repo.GetCategory(r.Context(), chi.URLParam(r, "id")); err == nil {
+		a.writeResponse(w, r, result, http.StatusOK)
+	} else {
+		a.writeErrorResponse(w, r, err)
+	}
+}
+
 func (a *api) writeResponse(w http.ResponseWriter, r *http.Request, result any, statusCode int) {
 	if strings.Contains(r.Header.Get("Accept"), "text/html") {
 		a.browser.Write(w, r, result)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	if statusCode > 0 {
 		w.WriteHeader(statusCode)
 	}
