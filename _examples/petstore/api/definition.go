@@ -64,6 +64,25 @@ var definition = chioas.Definition{
 						},
 					},
 				},
+				paths.Categories: {
+					Tag: "Categories",
+					Methods: chioas.Methods{
+						http.MethodGet: {
+							Handler:     (*api).GetCategories,
+							Description: "List categories",
+						},
+					},
+					Paths: chioas.Paths{
+						paths.UuidPath: {
+							Methods: chioas.Methods{
+								http.MethodGet: {
+									Handler:     (*api).GetCategory,
+									Description: "Get category",
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	},
