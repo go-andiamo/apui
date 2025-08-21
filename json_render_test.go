@@ -37,14 +37,14 @@ func TestJsonRenderNode(t *testing.T) {
 		},
 		{
 			item:     []string{"one", "two", "three"},
-			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">[<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"one",</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"two",</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"three"</code><br></div><code>]</code><br></div>`,
+			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">[<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"one",</code><br><span>&nbsp;&nbsp;</span><code>"two",</code><br><span>&nbsp;&nbsp;</span><code>"three"</code><br></div><code>]</code><br></div>`,
 		},
 		{
 			item: struct {
 				Foo string `json:"foo"`
 				Bar string `json:"bar"`
 			}{},
-			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"foo": "",</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"bar": ""</code><br></div><code>}</code><br></div>`,
+			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo": "",</code><br><span>&nbsp;&nbsp;</span><code>"bar": ""</code><br></div><code>}</code><br></div>`,
 		},
 		{
 			item: struct {
@@ -53,7 +53,7 @@ func TestJsonRenderNode(t *testing.T) {
 			}{
 				Foo: "some/uri",
 			},
-			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"foo":</code>&nbsp;"<a href="some/uri" contenteditable="false">some/uri</a>",<br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"bar": ""</code><br></div><code>}</code><br></div>`,
+			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo":</code>&nbsp;"<a href="some/uri" contenteditable="false">some/uri</a>",<br><span>&nbsp;&nbsp;</span><code>"bar": ""</code><br></div><code>}</code><br></div>`,
 			setup: func() {
 				DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"foo"}}
 			},
@@ -65,7 +65,7 @@ func TestJsonRenderNode(t *testing.T) {
 			item: map[string]any{
 				"foo": "bar",
 			},
-			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"foo":</code>&nbsp;"<a href="bar" contenteditable="false">bar</a>"<br></div><code>}</code><br></div>`,
+			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo":</code>&nbsp;"<a href="bar" contenteditable="false">bar</a>"<br></div><code>}</code><br></div>`,
 			setup: func() {
 				DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"foo"}}
 			},
@@ -77,7 +77,7 @@ func TestJsonRenderNode(t *testing.T) {
 			item: map[string]any{
 				"foo": []string{"bar", "baz"},
 			},
-			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"foo": </code><div onclick="(e => collapsed(e))(event)">[<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"bar",</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"baz"</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></div><code>]</code><br></div><code>}</code><br></div>`,
+			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo": </code><div onclick="(e => collapsed(e))(event)">[<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"bar",</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"baz"</code><br><span>&nbsp;&nbsp;</span></div><code>]</code><br></div><code>}</code><br></div>`,
 		},
 		{
 			item: map[string]any{
@@ -85,7 +85,7 @@ func TestJsonRenderNode(t *testing.T) {
 					"bar": "baz",
 				},
 			},
-			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"foo": </code><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"bar": "baz"</code><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></div><code>}</code><br></div><code>}</code><br></div>`,
+			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo": </code><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><code>"bar": "baz"</code><br><span>&nbsp;&nbsp;</span></div><code>}</code><br></div><code>}</code><br></div>`,
 		},
 		{
 			item:      &unmarshallable{},
