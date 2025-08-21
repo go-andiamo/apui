@@ -10,6 +10,7 @@ import (
 type Repository interface {
 	SearchPets(ctx context.Context, category string) ([]*models.Pet, error)
 	GetPet(ctx context.Context, id string) (*models.Pet, error)
+	DeletePet(ctx context.Context, id string) error
 	ListCategories(ctx context.Context) ([]models.Category, error)
 	GetCategory(ctx context.Context, id string) (models.Category, error)
 }
@@ -42,6 +43,19 @@ func (r *repository) GetPet(ctx context.Context, id string) (*models.Pet, error)
 		}
 	}
 	return nil, httperr.NewNotFoundError("pet not found")
+}
+
+func (r *repository) DeletePet(ctx context.Context, id string) error {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	for i, pet := range r.pets {
+		if pet.Id.String() == id {
+			r.pets[i] = r.pets[len(r.pets)-1]
+			r.pets = r.pets[:len(r.pets)-1]
+			return nil
+		}
+	}
+	return httperr.NewNotFoundError("pet not found")
 }
 
 func (r *repository) ListCategories(ctx context.Context) ([]models.Category, error) {

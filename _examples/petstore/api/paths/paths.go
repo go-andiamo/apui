@@ -7,6 +7,9 @@ const (
 	Pets       = "/pets"
 	Categories = "/categories"
 
+	UuidPattern = "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$"
+	UuidPath    = "/{id:" + UuidPattern + "}"
+
 	pathPets       = Root + Pets
 	pathCategories = Root + Categories
 )
