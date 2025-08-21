@@ -203,7 +203,10 @@ func getContextResponse(ctx *context.Context) (any, bool) {
 
 func (b *Browser) Write(w http.ResponseWriter, r *http.Request, response any, addCargo ...map[string]any) {
 	cargo := map[string]any{
-		keyTitle: "Test me!",
+		keyTitle: "API",
+	}
+	if b.definition != nil && b.definition.Info.Title != "" {
+		cargo[keyTitle] = b.definition.Info.Title
 	}
 	if b.defaultTheme != "" {
 		cargo[keyTheme] = "theme-" + b.defaultTheme
