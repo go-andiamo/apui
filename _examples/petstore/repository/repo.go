@@ -3,13 +3,17 @@ package repository
 import (
 	"context"
 	"github.com/go-andiamo/httperr"
+	"github.com/google/uuid"
+	"petstore/api/paths"
 	"petstore/models"
+	"petstore/models/requests"
 	"sync"
 )
 
 type Repository interface {
 	SearchPets(ctx context.Context, category string) ([]*models.Pet, error)
 	GetPet(ctx context.Context, id string) (*models.Pet, error)
+	AddPet(ctx context.Context, pet requests.AddPet) (*models.Pet, error)
 	DeletePet(ctx context.Context, id string) error
 	ListCategories(ctx context.Context) ([]models.Category, error)
 	GetCategory(ctx context.Context, id string) (models.Category, error)
@@ -43,6 +47,31 @@ func (r *repository) GetPet(ctx context.Context, id string) (*models.Pet, error)
 		}
 	}
 	return nil, httperr.NewNotFoundError("pet not found")
+}
+
+func (r *repository) AddPet(ctx context.Context, pet requests.AddPet) (*models.Pet, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	var category *models.Category
+	for _, c := range r.categories {
+		if pet.Category.Id == c.Id.String() || pet.Category.Name == c.Name {
+			category = &c
+			break
+		}
+	}
+	if category == nil {
+		return nil, httperr.NewUnprocessableEntityErrorf("category not found")
+	}
+	id := uuid.New()
+	result := &models.Pet{
+		Uri:      paths.PetURI(id),
+		Id:       id,
+		Name:     pet.Name,
+		DoB:      pet.DoB,
+		Category: *category,
+	}
+	r.pets = append(r.pets, result)
+	return result, nil
 }
 
 func (r *repository) DeletePet(ctx context.Context, id string) error {

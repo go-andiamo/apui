@@ -7,6 +7,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
 	"petstore/api/paths"
+	"petstore/models"
+	"petstore/models/requests"
 	"petstore/repository"
 	"strings"
 )
@@ -57,6 +59,20 @@ func (a *api) GetPets(w http.ResponseWriter, r *http.Request) {
 	if result, err := a.repo.SearchPets(r.Context(), ""); err == nil {
 		a.writeResponse(w, r, result, http.StatusOK)
 	} else {
+		a.writeErrorResponse(w, r, err)
+	}
+}
+
+func (a *api) PostPets(w http.ResponseWriter, r *http.Request) {
+	var request *requests.AddPet
+	var err error
+	if request, err = requests.AddPetFromRequest(r); err == nil {
+		var result *models.Pet
+		if result, err = a.repo.AddPet(r.Context(), *request); err == nil {
+			a.writeResponse(w, r, result, http.StatusCreated)
+		}
+	}
+	if err != nil {
 		a.writeErrorResponse(w, r, err)
 	}
 }
