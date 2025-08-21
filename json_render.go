@@ -72,7 +72,7 @@ var jsonRenderNode = html.Div(
 	html.ContentEditable("true"),
 	html.OnBeforeInput("return false"),
 	aitch.Imperative(func(ctx aitch.ImperativeContext) error {
-		data, err := json.MarshalIndent(ctx.Context().Cargo, "", "    ")
+		data, err := json.MarshalIndent(ctx.Context().Cargo, "", " ")
 		if err != nil {
 			return err
 		}
@@ -82,7 +82,9 @@ var jsonRenderNode = html.Div(
 			if spaces := len(line) - len(trimmed); spaces > 0 {
 				ctx.Start(elemSpan, false)
 				for i := spaces; i > 0; i-- {
-					ctx.WriteRaw(nbsp)
+					for j := 0; j < JsonIndent; j++ {
+						ctx.WriteRaw(nbsp)
+					}
 				}
 				ctx.End()
 			}

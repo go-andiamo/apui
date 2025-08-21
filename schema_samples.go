@@ -67,14 +67,24 @@ func schemaFrom(s any) *chioas.Schema {
 
 func schemaSample(schema *chioas.Schema, isArray bool) string {
 	var builder strings.Builder
-	indent := strings.Repeat(" ", 4)
+	indent := strings.Repeat(" ", JsonIndent)
 	if isArray {
 		builder.WriteString("[\n    {\n")
-		indent = strings.Repeat(" ", 8)
+		indent = strings.Repeat(" ", JsonIndent*2)
 	} else {
 		builder.WriteString("{\n")
 	}
-	for i, pty := range schema.Properties {
+	schemaSampleProperties(&builder, indent, schema.Properties)
+	if isArray {
+		builder.WriteString("    }\n]")
+	} else {
+		builder.WriteString("}")
+	}
+	return builder.String()
+}
+
+func schemaSampleProperties(builder *strings.Builder, indent string, ptys chioas.Properties) {
+	for i, pty := range ptys {
 		builder.WriteString(indent)
 		builder.WriteString(`"` + pty.Name + `": `)
 		switch pty.Type {
@@ -87,20 +97,21 @@ func schemaSample(schema *chioas.Schema, isArray bool) string {
 		case "array":
 			builder.WriteString("[]")
 		case "object":
-			builder.WriteString("{}")
+			if len(pty.Properties) > 0 {
+				builder.WriteString("{\n")
+				schemaSampleProperties(builder, indent+strings.Repeat(" ", JsonIndent), pty.Properties)
+				builder.WriteString(indent)
+				builder.WriteString("}")
+			} else {
+				builder.WriteString("{}")
+			}
 		default:
 			builder.WriteString(`""`)
 		}
-		if i == len(schema.Properties)-1 {
+		if i == len(ptys)-1 {
 			builder.WriteString("\n")
 		} else {
 			builder.WriteString(",\n")
 		}
 	}
-	if isArray {
-		builder.WriteString("    }\n]")
-	} else {
-		builder.WriteString("}")
-	}
-	return builder.String()
 }

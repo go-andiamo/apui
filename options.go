@@ -53,6 +53,8 @@ type Logo struct {
 	Node aitch.Node
 }
 
+var JsonIndent = 2
+
 type UriPropertyDetector interface {
 	IsUriProperty(ptyName string) bool
 }
