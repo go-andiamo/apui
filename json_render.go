@@ -151,9 +151,3 @@ func isUriProperty(line string) (ptyName string, uri string, ok bool) {
 	}
 	return
 }
-
-type UriPropertyDetector interface {
-	IsUriProperty(ptyName string) bool
-}
-
-var DefaultUriPropertyDetector UriPropertyDetector = nil

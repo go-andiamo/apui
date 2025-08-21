@@ -43,7 +43,7 @@ header.header .dropdown summary {
     line-height: 1;
 }
 header.header .dropdown[open] summary {
-    border-radius: 4px 4px 0 4px;
+    border-radius: 4px 4px 0 0;
     color: var(--hdr-opened-text-color, var(--hdr-text-color));
     background-color: var(--hdr-opened-bg-color, var(--hdr-bg-color));
     border: 1px solid var(--hdr-border-color);

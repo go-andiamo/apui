@@ -15,6 +15,7 @@ import (
 var (
 	headerScript      = html.Script(scripts.HeaderScript)
 	headerThemeChange = html.OnChange([]byte("(e => themeSelect(e))(event)"))
+	headerThemeId     = html.Id("theme-select")
 	logoSvg           = svg.Svg(
 		aitch.Attribute("xmlns", "http://www.w3.org/2000/svg"),
 		aitch.Attribute("viewBox", "0 0 128 128"),
@@ -58,9 +59,9 @@ func (b *Browser) writeHeader(ctx aitch.ImperativeContext) error {
 	}
 	ctx.Start(elemDiv, false, html.Class("title"))
 	if version == "" {
-		ctx.WriteNodes(html.H2(logoSpan, title))
+		ctx.WriteNodes(html.H2(b.logo, title))
 	} else {
-		ctx.WriteNodes(html.H2(logoSpan, title, html.Sup(html.Class("small"), " Version: ", version)))
+		ctx.WriteNodes(html.H2(b.logo, title, html.Sup(html.Class("small"), " Version: ", version)))
 	}
 	ctx.End()
 	b.writeHeaderDropdown(ctx)
@@ -80,7 +81,7 @@ func (b *Browser) writeHeaderDropdown(ctx aitch.ImperativeContext) {
 			ctx.Start(elemDiv, false).
 				WriteElement(elemSpan, "Theme:").
 				WriteRaw(nbsp).
-				Start(elemSelect, false, headerThemeChange)
+				Start(elemSelect, false, headerThemeChange, headerThemeId)
 			for _, theme := range b.themes {
 				name, _ := themes.NormalizeName(theme.Name)
 				ctx.Start(elemOption, false, html.Value("theme-"+name)).
