@@ -49,6 +49,20 @@ var definition = chioas.Definition{
 							Description: "List/search pets",
 						},
 					},
+					Paths: chioas.Paths{
+						paths.UuidPath: {
+							Methods: chioas.Methods{
+								http.MethodGet: {
+									Handler:     (*api).GetPet,
+									Description: "Get pet",
+								},
+								http.MethodDelete: {
+									Handler:     (*api).DeletePet,
+									Description: "Delete pet",
+								},
+							},
+						},
+					},
 				},
 			},
 		},
