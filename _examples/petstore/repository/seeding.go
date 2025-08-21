@@ -34,7 +34,7 @@ func (r *repository) seed() {
 		{
 			Id:   uuid.New(),
 			Name: "Felix",
-			DoB:  time.Now().Add(0 - (time.Hour * 24 * 40)),
+			DoB:  models.DoB(time.Now().Add(0 - (time.Hour * 24 * 40))),
 			Category: models.Category{
 				Name: "Cats",
 			},
@@ -42,7 +42,7 @@ func (r *repository) seed() {
 		{
 			Id:   uuid.New(),
 			Name: "Rex",
-			DoB:  time.Now().Add(0 - (time.Hour * 24 * 50)),
+			DoB:  models.DoB(time.Now().Add(0 - (time.Hour * 24 * 50))),
 			Category: models.Category{
 				Name: "Dogs",
 			},
@@ -50,7 +50,7 @@ func (r *repository) seed() {
 		{
 			Id:   uuid.New(),
 			Name: "Nibbles",
-			DoB:  time.Now().Add(0 - (time.Hour * 24 * 20)),
+			DoB:  models.DoB(time.Now().Add(0 - (time.Hour * 24 * 20))),
 			Category: models.Category{
 				Name: "Hamsters",
 			},
