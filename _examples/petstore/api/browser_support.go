@@ -54,6 +54,9 @@ var _ apui.ResourceTypeDetector = (*api)(nil)
 var _ apui.DocsPathDetector = (*api)(nil)
 
 func (a *api) DetectResourceType(response any) apui.ResourceType {
+	if _, ok := response.(error); ok {
+		return apui.Error
+	}
 	if reflect.TypeOf(response).Kind() == reflect.Slice {
 		return apui.Collection
 	}

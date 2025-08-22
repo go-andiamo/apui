@@ -38,7 +38,7 @@ func (b *Browser) writeAssociatedMethods(ctx aitch.ImperativeContext, req *http.
 		// write method select...
 		ctx.Start(elemSelect, false, assocMethodChange)
 		for i, m := range others {
-			ctx.WriteElement(elemOption, m.method+" "+m.displayPath, html.Value(i), html.Title(m.def.Description))
+			ctx.WriteElement(elemOption, m.method+" "+m.path, html.Value(i), html.Title(m.def.Description))
 		}
 		ctx.End() //select
 		ctx.Start(elemHr, true)

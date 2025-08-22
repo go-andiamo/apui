@@ -19,6 +19,9 @@ func AddPetFromRequest(r *http.Request) (*AddPet, error) {
 	}
 	result := new(AddPet)
 	if err := json.NewDecoder(r.Body).Decode(result); err != nil {
+		if hErr, ok := err.(httperr.HttpError); ok {
+			return nil, hErr
+		}
 		return nil, httperr.NewBadRequestError("invalid json body").WithCause(err)
 	}
 	return result, nil

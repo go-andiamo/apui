@@ -10,7 +10,7 @@ function addQueryParam() {
     cell1.textContent = qpName;
     row.appendChild(cell1);
     let cell2 = row.insertCell(-1);
-    cell2.innerHTML = '<input/>';
+    cell2.innerHTML = '<input name="'+qpName+'"/>';
     let cell3 = row.insertCell(-1);
     cell3.innerHTML = '<button onclick="(e => removeQueryParam(e))(event)">-</button>';
     row.querySelector('input').focus();

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"petstore/api/paths"
 	"petstore/models"
+	"petstore/models/params"
 	"petstore/models/requests"
 	"petstore/repository"
 	"strings"
@@ -31,6 +32,9 @@ type api struct {
 }
 
 func (a *api) Start() error {
+	httperr.DefaultErrorWriterShowCause = true
+	httperr.DefaultErrorWriterShowStack = true
+	httperr.DefaultPackageName = "petstore/"
 	r := chi.NewRouter()
 	if err := definition.SetupRoutes(r, a); err != nil {
 		return err
@@ -56,9 +60,15 @@ func (a *api) GetRoot(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *api) GetPets(w http.ResponseWriter, r *http.Request) {
-	if result, err := a.repo.SearchPets(r.Context(), ""); err == nil {
-		a.writeResponse(w, r, result, http.StatusOK)
-	} else {
+	var filter *params.PetFilter
+	var err error
+	if filter, err = params.PetFilterFromRequest(r); err == nil {
+		var result []*models.Pet
+		if result, err = a.repo.SearchPets(r.Context(), filter); err == nil {
+			a.writeResponse(w, r, result, http.StatusOK)
+		}
+	}
+	if err != nil {
 		a.writeErrorResponse(w, r, err)
 	}
 }
@@ -124,5 +134,9 @@ func (a *api) writeResponse(w http.ResponseWriter, r *http.Request, result any, 
 }
 
 func (a *api) writeErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
+	if strings.Contains(r.Header.Get("Accept"), "text/html") {
+		a.browser.Write(w, r, err)
+		return
+	}
 	httperr.DefaultErrorWriter.WriteError(err, w)
 }

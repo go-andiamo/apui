@@ -6,6 +6,7 @@ require (
 	github.com/andybalholm/cascadia v1.3.3
 	github.com/go-andiamo/aitch v1.4.5
 	github.com/go-andiamo/chioas v1.16.6
+	github.com/go-andiamo/httperr v1.1.0
 	github.com/go-andiamo/splitter v1.2.5
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/net v0.37.0

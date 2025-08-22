@@ -4,6 +4,7 @@ import (
 	"github.com/go-andiamo/chioas"
 	"net/http"
 	"petstore/api/paths"
+	"petstore/models/params"
 	"petstore/models/requests"
 )
 
@@ -48,6 +49,7 @@ var definition = chioas.Definition{
 						http.MethodGet: {
 							Handler:     (*api).GetPets,
 							Description: "List/search pets",
+							QueryParams: (params.PetFilter{}).ToQueryParams(),
 						},
 						http.MethodPost: {
 							Handler:     (*api).PostPets,
