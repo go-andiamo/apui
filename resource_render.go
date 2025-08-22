@@ -3,11 +3,15 @@ package apui
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/go-andiamo/aitch"
 	"github.com/go-andiamo/aitch/context"
 	"github.com/go-andiamo/aitch/html"
+	"github.com/go-andiamo/httperr"
+	"net/http"
 	"reflect"
 	"slices"
+	"strconv"
 )
 
 type ResourceType int
@@ -16,6 +20,7 @@ const (
 	Unknown ResourceType = iota
 	Entity
 	Collection
+	Error
 )
 
 type ResourceTypeDetector interface {
@@ -26,6 +31,9 @@ type ResourceTypeDetector interface {
 type resourceTypeDetector struct{}
 
 func (r *resourceTypeDetector) DetectResourceType(response any) ResourceType {
+	if _, ok := response.(error); ok {
+		return Error
+	}
 	t := reflect.TypeOf(response)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
@@ -56,6 +64,8 @@ func (b *Browser) writeMain(ctx aitch.ImperativeContext) error {
 			b.writeMainEntity(ctx, res)
 		case Collection:
 			b.writeMainCollection(ctx, res)
+		case Error:
+			b.writeMainError(ctx, res)
 		default:
 			b.writeMainUnknown(ctx, res)
 		}
@@ -248,9 +258,40 @@ func (b *Browser) convertToCollection(response any) []map[string]any {
 	return result
 }
 
+func (b *Browser) writeMainError(ctx aitch.ImperativeContext, response any) {
+	ctx.Start(elemDiv, false, classLl).
+		Start(elemH3, false).WriteString("Error")
+	statusCode := -1
+	needJsonCheck := true
+	if e, ok := response.(httperr.HttpError); ok {
+		statusCode = e.StatusCode()
+		needJsonCheck = false
+	} else if e, ok := response.(httperr.StatusError); ok {
+		statusCode = e.StatusCode()
+	}
+	if statusCode > 0 {
+		ctx.WriteRaw(nbsp).
+			Start(elemSpan, false, html.Class("status"), html.Class(fmt.Sprintf("x%dxx", statusCode/100))).
+			WriteString(strconv.Itoa(statusCode)).End().
+			Start(elemSpan, false, html.Class("status-text")).
+			WriteString(http.StatusText(statusCode)).End()
+	}
+	ctx.End().End()
+	var errResponse = response
+	if needJsonCheck {
+		// check that error will display something...
+		if e, ok := response.(error); ok {
+			if data, err := json.Marshal(response); err == nil && string(data) == "{}" {
+				errResponse = e.Error()
+			}
+		}
+	}
+	b.writeMainUnknown(ctx, errResponse)
+}
+
 func (b *Browser) writeMainUnknown(ctx aitch.ImperativeContext, response any) {
 	jctx := &context.Context{
-		Cargo:  ctx.Context().Data["response"],
+		Cargo:  response,
 		Writer: ctx.Context().Writer,
 		Parent: ctx.Context(),
 	}

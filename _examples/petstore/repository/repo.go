@@ -6,12 +6,13 @@ import (
 	"github.com/google/uuid"
 	"petstore/api/paths"
 	"petstore/models"
+	"petstore/models/params"
 	"petstore/models/requests"
 	"sync"
 )
 
 type Repository interface {
-	SearchPets(ctx context.Context, category string) ([]*models.Pet, error)
+	SearchPets(ctx context.Context, filter *params.PetFilter) ([]*models.Pet, error)
 	GetPet(ctx context.Context, id string) (*models.Pet, error)
 	AddPet(ctx context.Context, pet requests.AddPet) (*models.Pet, error)
 	DeletePet(ctx context.Context, id string) error
@@ -31,11 +32,19 @@ type repository struct {
 	categories []models.Category
 }
 
-func (r *repository) SearchPets(ctx context.Context, category string) ([]*models.Pet, error) {
-	//TODO implement me
+func (r *repository) SearchPets(ctx context.Context, filter *params.PetFilter) ([]*models.Pet, error) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
-	return r.pets, nil
+	if filter == nil {
+		return r.pets, nil
+	}
+	result := make([]*models.Pet, 0, len(r.pets))
+	for _, pet := range r.pets {
+		if filter.Matches(pet) {
+			result = append(result, pet)
+		}
+	}
+	return result, nil
 }
 
 func (r *repository) GetPet(ctx context.Context, id string) (*models.Pet, error) {

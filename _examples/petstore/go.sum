@@ -13,6 +13,10 @@ github.com/go-andiamo/chioas v1.16.6 h1:4ScXH+t9bID8yYw0ru8Y7+S/4n1SEf5KW3LRFhTV
 github.com/go-andiamo/chioas v1.16.6/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
 github.com/go-andiamo/httperr v1.0.0 h1:HC0AErLJ1+sXGg9BnPScUsdJV/dnPdg4uuPuinYKItk=
 github.com/go-andiamo/httperr v1.0.0/go.mod h1:pS8gozYTa9WDhOXKpy0Z8N42U70awODLcQ6GSzis7wE=
+github.com/go-andiamo/httperr v1.0.1 h1:Wk7Gn0lPKPJpRHPSHhc6xK9rSsQgrm1xRcQko3SxTYs=
+github.com/go-andiamo/httperr v1.0.1/go.mod h1:pS8gozYTa9WDhOXKpy0Z8N42U70awODLcQ6GSzis7wE=
+github.com/go-andiamo/httperr v1.1.0 h1:B3wmFsGrrDwn9CLb+Sb2r6AtpH3rrxrgzzh0oqRaWJE=
+github.com/go-andiamo/httperr v1.1.0/go.mod h1:pS8gozYTa9WDhOXKpy0Z8N42U70awODLcQ6GSzis7wE=
 github.com/go-andiamo/splitter v1.2.5 h1:P3NovWMY2V14TJJSolXBvlOmGSZo3Uz+LtTl2bsV/eY=
 github.com/go-andiamo/splitter v1.2.5/go.mod h1:8WHU24t9hcMKU5FXDQb1hysSEC/GPuivIp0uKY1J8gw=
 github.com/go-andiamo/urit v1.2.1 h1:5JHJb+TuzuGvXw9Y/LK/lQltCL2gpgHkCznI2vv9ZeY=

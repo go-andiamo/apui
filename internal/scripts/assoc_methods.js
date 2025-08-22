@@ -38,11 +38,10 @@ function methodExec(method, path) {
         if (req.readyState === XMLHttpRequest.DONE) {
             status.innerText = ""+req.status;
             statusText.innerText = ""+req.statusText;
-
             methodDiv.classList.remove("fetching");
             methodDiv.classList.add("response");
             status.innerText = "" + req.status;
-            let sClass = req.status % 100;
+            let sClass = (req.status - (req.status % 100)) / 100;
             if (sClass > 0 && sClass <= 5) {
                 status.classList.add("x"+sClass+"xx");
             }
