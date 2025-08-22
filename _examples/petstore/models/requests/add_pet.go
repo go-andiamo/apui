@@ -8,9 +8,14 @@ import (
 )
 
 type AddPet struct {
-	Name     string     `json:"name" oas:"required,type:string"`
-	DoB      models.DoB `json:"dob" oas:"required,type:string"`
-	Category Category   `json:"category"oas:"required,type:object"`
+	Name     string     `json:"name"     oas:"required,type:string,description:'Name of the pet'"`
+	DoB      models.DoB `json:"dob"      oas:"required,type:string,format:date,description:'Date of birth'"`
+	Category Category   `json:"category" oas:"required,type:object,description:'Category of the pet'"`
+}
+
+type Category struct {
+	Id   string `json:"id"   oas:"format:uuid,description:'ID of the category'"`
+	Name string `json:"name" oas:"type:string,description:'Name of the category'"`
 }
 
 func AddPetFromRequest(r *http.Request) (*AddPet, error) {
@@ -25,9 +30,4 @@ func AddPetFromRequest(r *http.Request) (*AddPet, error) {
 		return nil, httperr.NewBadRequestError("invalid json body").WithCause(err)
 	}
 	return result, nil
-}
-
-type Category struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
 }
