@@ -8,8 +8,19 @@ import (
 	"petstore/models"
 	"petstore/models/params"
 	"petstore/models/requests"
+	"slices"
+	"strings"
 	"sync"
+	"time"
 )
+
+/*
+Nothing to see here!
+
+This repository implementation is just to provide data to the example api
+
+Not intended as recommended code!
+*/
 
 type Repository interface {
 	SearchPets(ctx context.Context, filter *params.PetFilter) ([]*models.Pet, error)
@@ -44,7 +55,39 @@ func (r *repository) SearchPets(ctx context.Context, filter *params.PetFilter) (
 			result = append(result, pet)
 		}
 	}
-	return result, nil
+	return sortPets(result, filter.Order), nil
+}
+
+func sortPets(pets []*models.Pet, orders []string) []*models.Pet {
+	if len(orders) == 0 {
+		return pets
+	}
+	slices.SortFunc(pets, func(a, b *models.Pet) int {
+		cmp := 0
+		reverse := false
+		for _, order := range orders {
+			if strings.HasPrefix(order, "-") {
+				reverse = true
+				order = strings.TrimPrefix(order, "-")
+			}
+			switch order {
+			case "name":
+				cmp = strings.Compare(a.Name, b.Name)
+			case "category":
+				cmp = strings.Compare(a.Category.Name, b.Category.Name)
+			case "dob":
+				cmp = time.Time(a.DoB).Compare(time.Time(b.DoB))
+			}
+			if cmp != 0 {
+				break
+			}
+		}
+		if reverse {
+			cmp = 0 - cmp
+		}
+		return cmp
+	})
+	return pets
 }
 
 func (r *repository) GetPet(ctx context.Context, id string) (*models.Pet, error) {

@@ -4,6 +4,7 @@ import (
 	"github.com/go-andiamo/chioas"
 	"net/http"
 	"petstore/api/paths"
+	"petstore/models"
 	"petstore/models/params"
 	"petstore/models/requests"
 )
@@ -50,6 +51,12 @@ var definition = chioas.Definition{
 							Handler:     (*api).GetPets,
 							Description: "List/search pets",
 							QueryParams: (params.PetFilter{}).ToQueryParams(),
+							Responses: chioas.Responses{
+								http.StatusOK: {
+									IsArray: true,
+									Schema:  (&chioas.Schema{}).MustFrom(models.Pet{}),
+								},
+							},
 						},
 						http.MethodPost: {
 							Handler:     (*api).PostPets,
@@ -59,6 +66,11 @@ var definition = chioas.Definition{
 								Required:    true,
 								Schema:      (&chioas.Schema{}).MustFrom(requests.AddPet{}),
 							},
+							Responses: chioas.Responses{
+								http.StatusCreated: {
+									Schema: (&chioas.Schema{}).MustFrom(models.Pet{}),
+								},
+							},
 						},
 					},
 					Paths: chioas.Paths{
@@ -67,6 +79,11 @@ var definition = chioas.Definition{
 								http.MethodGet: {
 									Handler:     (*api).GetPet,
 									Description: "Get pet",
+									Responses: chioas.Responses{
+										http.StatusOK: {
+											Schema: (&chioas.Schema{}).MustFrom(models.Pet{}),
+										},
+									},
 								},
 								http.MethodDelete: {
 									Handler:     (*api).DeletePet,
@@ -82,6 +99,12 @@ var definition = chioas.Definition{
 						http.MethodGet: {
 							Handler:     (*api).GetCategories,
 							Description: "List categories",
+							Responses: chioas.Responses{
+								http.StatusOK: {
+									IsArray: true,
+									Schema:  (&chioas.Schema{}).MustFrom(models.Category{}),
+								},
+							},
 						},
 					},
 					Paths: chioas.Paths{
@@ -90,6 +113,11 @@ var definition = chioas.Definition{
 								http.MethodGet: {
 									Handler:     (*api).GetCategory,
 									Description: "Get category",
+									Responses: chioas.Responses{
+										http.StatusOK: {
+											Schema: (&chioas.Schema{}).MustFrom(models.Category{}),
+										},
+									},
 								},
 							},
 						},

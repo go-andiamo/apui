@@ -15,12 +15,14 @@ type PetFilter struct {
 	DoBEqual *time.Time
 	DobFrom  *time.Time
 	DobTo    *time.Time
+	Order    []string
 }
 
 const (
 	paramName     = "name"
 	paramDoB      = "dob"
 	paramCategory = "category"
+	paramOrder    = "order"
 )
 
 func (f PetFilter) ToQueryParams() chioas.QueryParams {
@@ -40,6 +42,10 @@ func (f PetFilter) ToQueryParams() chioas.QueryParams {
 				Type:   "string",
 				Format: "date",
 			},
+		},
+		{
+			Name:        paramOrder,
+			Description: "Order result by property",
 		},
 	}
 }
@@ -105,6 +111,14 @@ func PetFilterFromRequest(r *http.Request) (result *PetFilter, err error) {
 			}
 		} else {
 			err = httperr.NewBadRequestErrorf("query paramater %q can only be specified once or twice", paramDoB)
+		}
+	}
+	if vals, ok := r.URL.Query()[paramOrder]; ok {
+		present = true
+		for _, val := range vals {
+			for _, order := range strings.Split(val, ",") {
+				result.Order = append(result.Order, strings.ToLower(order))
+			}
 		}
 	}
 	if !present || err != nil {
