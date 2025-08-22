@@ -228,6 +228,11 @@ func (b *Browser) writeMainEntity(ctx aitch.ImperativeContext, response any) {
 
 func (b *Browser) writeMainCollection(ctx aitch.ImperativeContext, response any) {
 	c := b.convertToCollection(b.resourceTypeDetector.CollectionItems(response))
+	if len(c) == 0 {
+		ctx.Start(elemDiv, false, classLl).
+			Start(elemH3, false).WriteString("No Items").End().End()
+		return
+	}
 	hdrsSeen := make(map[string]struct{})
 	hdrs := make([]string, 0)
 	for _, item := range c {
