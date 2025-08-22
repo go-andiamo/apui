@@ -59,7 +59,7 @@ func (f *PetFilter) Matches(pet *models.Pet) (matches bool) {
 		matches = time.Time(pet.DoB).Format("2006-01-02") >= f.DobFrom.Format("2006-01-02")
 	}
 	if matches && f.DobTo != nil {
-		matches = time.Time(pet.DoB).Format("2006-01-02") <= f.DobFrom.Format("2006-01-02")
+		matches = time.Time(pet.DoB).Format("2006-01-02") <= f.DobTo.Format("2006-01-02")
 	}
 	return matches
 }
@@ -84,22 +84,21 @@ func PetFilterFromRequest(r *http.Request) (result *PetFilter, err error) {
 		}
 	}
 	if vals, ok := r.URL.Query()[paramDoB]; ok {
-		var dt time.Time
 		if len(vals) == 1 {
 			present = true
-			if dt, err = time.Parse("2006-01-02", vals[0]); err == nil {
+			if dt, e := time.Parse("2006-01-02", vals[0]); e == nil {
 				result.DoBEqual = &dt
 			} else {
 				err = httperr.NewBadRequestError("invalid date of birth")
 			}
 		} else if len(vals) == 2 {
 			present = true
-			if dt, err = time.Parse("2006-01-02", vals[0]); err == nil {
+			if dt, e := time.Parse("2006-01-02", vals[0]); e == nil {
 				result.DobFrom = &dt
 			} else {
 				err = httperr.NewBadRequestError("invalid date of birth")
 			}
-			if dt, err = time.Parse("2006-01-02", vals[1]); err == nil {
+			if dt, e := time.Parse("2006-01-02", vals[1]); e == nil {
 				result.DobTo = &dt
 			} else {
 				err = httperr.NewBadRequestError("invalid date of birth")
