@@ -31,9 +31,9 @@ func TestTheme_buildVars(t *testing.T) {
 		output, err := theme.buildVars()
 		require.NoError(t, err)
 		const expect = `.theme-dark {
-	--ftr-text-color: #fff;
-	--ftr-bg-color: #333;
-	--ftr-border-color: #fff;
+	--ftr-text-color: rgb(255,255,255);
+	--ftr-bg-color: rgb(51,51,51);
+	--ftr-border-color: rgb(255,255,255);
 }`
 		require.Equal(t, expect, string(output))
 	})
@@ -49,9 +49,9 @@ func TestTheme_buildVars(t *testing.T) {
 		output, err := theme.buildVars()
 		require.NoError(t, err)
 		const expect = `:root {
-	--ftr-text-color: #fff;
-	--ftr-bg-color: #333;
-	--ftr-border-color: #fff;
+	--ftr-text-color: rgb(255,255,255);
+	--ftr-bg-color: rgb(51,51,51);
+	--ftr-border-color: rgb(255,255,255);
 }`
 		require.Equal(t, expect, string(output))
 	})
@@ -87,9 +87,9 @@ func TestTheme_styleNode(t *testing.T) {
 		require.NoError(t, err)
 		const expect = `<style>
 .theme-dark {
-	--ftr-text-color: #fff;
-	--ftr-bg-color: #333;
-	--ftr-border-color: #fff;
+	--ftr-text-color: rgb(255,255,255);
+	--ftr-bg-color: rgb(51,51,51);
+	--ftr-border-color: rgb(255,255,255);
 }
 </style>`
 		require.Equal(t, expect, output)

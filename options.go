@@ -5,7 +5,9 @@ import (
 	"net/http"
 )
 
-type HtmlTemplate string
+type HtmlTemplate struct {
+	Template string
+}
 
 type TemplateNode struct {
 	Name string
@@ -47,7 +49,9 @@ type ShowHeader bool
 
 type ShowFooter bool
 
-type DefaultTheme string
+type DefaultTheme struct {
+	Name string
+}
 
 type Logo struct {
 	Node aitch.Node
@@ -75,4 +79,9 @@ func (u *uriPropertyDetector) IsUriProperty(ptyName string) bool {
 
 type DocsPathDetector interface {
 	ResolveDocsPath(r *http.Request, defPath []string) string
+}
+
+type CookieJar interface {
+	// HtmlResponseCookies supplies cookies to be written for html responses
+	HtmlResponseCookies(w http.ResponseWriter, r *http.Request) []*http.Cookie
 }

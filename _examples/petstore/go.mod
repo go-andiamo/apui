@@ -11,8 +11,6 @@ require (
 	github.com/go-andiamo/httperr v1.1.0
 )
 
-require golang.org/x/net v0.37.0 // indirect
-
 replace github.com/go-andiamo/apui => ../..
 
 require (
@@ -20,5 +18,6 @@ require (
 	github.com/go-andiamo/urit v1.2.1 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df // indirect
+	golang.org/x/net v0.37.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

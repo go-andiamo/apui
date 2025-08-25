@@ -45,7 +45,8 @@ var definition = chioas.Definition{
 			},
 			Paths: chioas.Paths{
 				paths.Pets: {
-					Tag: "Pets",
+					Tag:              "Pets",
+					ApplyMiddlewares: applyAuthMiddlewares,
 					Methods: chioas.Methods{
 						http.MethodGet: {
 							Handler:     (*api).GetPets,
@@ -85,6 +86,20 @@ var definition = chioas.Definition{
 										},
 									},
 								},
+								http.MethodPut: {
+									Handler:     (*api).PutPet,
+									Description: "Update pet",
+									Request: &chioas.Request{
+										Description: "Pet update",
+										Required:    true,
+										Schema:      (&chioas.Schema{}).MustFrom(requests.UpdatePet{}),
+									},
+									Responses: chioas.Responses{
+										http.StatusOK: {
+											Schema: (&chioas.Schema{}).MustFrom(models.Pet{}),
+										},
+									},
+								},
 								http.MethodDelete: {
 									Handler:     (*api).DeletePet,
 									Description: "Delete pet",
@@ -94,7 +109,8 @@ var definition = chioas.Definition{
 					},
 				},
 				paths.Categories: {
-					Tag: "Categories",
+					Tag:              "Categories",
+					ApplyMiddlewares: applyAuthMiddlewares,
 					Methods: chioas.Methods{
 						http.MethodGet: {
 							Handler:     (*api).GetCategories,
@@ -125,5 +141,19 @@ var definition = chioas.Definition{
 				},
 			},
 		},
+	},
+	Components: &chioas.Components{
+		SecuritySchemes: chioas.SecuritySchemes{
+			{
+				Name:        "ApiKey",
+				Description: "Authorize using API key",
+				In:          "header",
+				Type:        "apiKey",
+				ParamName:   ApiKeyHdr,
+			},
+		},
+	},
+	Security: chioas.SecuritySchemes{
+		{Name: "ApiKey"},
 	},
 }

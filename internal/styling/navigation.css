@@ -9,9 +9,12 @@ header.navigation {
 header.navigation a {
     color: var(--nav-link-text-color, var(--body-link-text-color));
 }
-header.navigation select, body input, body button {
+header.navigation select, header.navigation input, header.navigation button {
     color: var(--nav-text-color);
     background-color: var(--nav-bg-color);
+}
+header.navigation button {
+    cursor: pointer;
 }
 header.navigation details {
     background-color: inherit;

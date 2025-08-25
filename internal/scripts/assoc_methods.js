@@ -55,6 +55,4 @@ function methodExec(method, path) {
         payload = body.innerText;
     }
     req.send(payload);
-
 }
-

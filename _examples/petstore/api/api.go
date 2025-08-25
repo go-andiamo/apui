@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-andiamo/apui"
 	"github.com/go-andiamo/httperr"
 	"github.com/go-chi/chi/v5"
@@ -20,7 +21,8 @@ type Api interface {
 
 func New(r repository.Repository) Api {
 	result := &api{
-		repo: r,
+		repo:   r,
+		apiKey: "", //"1add2add-3add-4add-5add-6add7add8add",
 	}
 	result.setupBrowser()
 	return result
@@ -29,6 +31,8 @@ func New(r repository.Repository) Api {
 type api struct {
 	repo    repository.Repository
 	browser *apui.Browser
+	// set apiKey to any key to enable authorization
+	apiKey string
 }
 
 func (a *api) Start() error {
@@ -39,6 +43,7 @@ func (a *api) Start() error {
 	if err := definition.SetupRoutes(r, a); err != nil {
 		return err
 	}
+	fmt.Printf("Starting server on http://localhost:8080 - use api key %q\n", a.apiKey)
 	return http.ListenAndServe(":8080", r)
 }
 
@@ -91,6 +96,20 @@ func (a *api) GetPet(w http.ResponseWriter, r *http.Request) {
 	if result, err := a.repo.GetPet(r.Context(), chi.URLParam(r, "id")); err == nil {
 		a.writeResponse(w, r, result, http.StatusOK)
 	} else {
+		a.writeErrorResponse(w, r, err)
+	}
+}
+
+func (a *api) PutPet(w http.ResponseWriter, r *http.Request) {
+	var request *requests.UpdatePet
+	var err error
+	if request, err = requests.UpdatePetFromRequest(r); err == nil {
+		var result *models.Pet
+		if result, err = a.repo.UpdatePet(r.Context(), chi.URLParam(r, "id"), *request); err == nil {
+			a.writeResponse(w, r, result, http.StatusOK)
+		}
+	}
+	if err != nil {
 		a.writeErrorResponse(w, r, err)
 	}
 }
