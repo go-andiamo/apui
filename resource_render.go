@@ -23,6 +23,8 @@ const (
 	Error
 )
 
+// ResourceTypeDetector is an interface option that can be passed to NewBrowser
+// and is used to determine the resource type
 type ResourceTypeDetector interface {
 	DetectResourceType(response any) ResourceType
 	CollectionItems(response any) any

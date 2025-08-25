@@ -214,7 +214,6 @@ func (b *Browser) writeHead(ctx aitch.ImperativeContext) error {
 			return err
 		}
 	}
-	// todo more?
 	return nil
 }
 
