@@ -12,7 +12,7 @@ function addQueryParam() {
     let cell2 = row.insertCell(-1);
     cell2.innerHTML = '<input name="'+qpName+'"/>';
     let cell3 = row.insertCell(-1);
-    cell3.innerHTML = '<button onclick="(e => removeQueryParam(e))(event)">-</button>';
+    cell3.innerHTML = '<button onclick="(e => removeQueryParam(e))(event)" class="remove" title="Remove">-</button>';
     row.querySelector('input').focus();
 }
 function queryParamsGet(path) {
