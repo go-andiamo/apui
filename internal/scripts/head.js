@@ -15,7 +15,6 @@ function setTheme(theme) {
     });
     document.body.classList.add(theme);
 }
-
 function focusing(evt) {
     if (!evt.target.classList.contains("remove")) {
         let opened = document.querySelectorAll("details[open]:not(.keep)");

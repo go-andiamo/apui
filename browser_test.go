@@ -1,6 +1,7 @@
 package apui
 
 import (
+	"github.com/go-andiamo/aitch/html"
 	"github.com/go-andiamo/apui/themes"
 	"github.com/go-andiamo/chioas"
 	"github.com/stretchr/testify/require"
@@ -9,6 +10,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestNewBrowser(t *testing.T) {
@@ -24,10 +26,22 @@ func TestBrowser_Write(t *testing.T) {
 		DefaultUriPropertyDetector = nil
 	}()
 
+	menu := Menu{
+		Show:            true,
+		ShowThemeSelect: true,
+		ShowEndpoints:   true,
+		AuthorizationNode: html.Div(
+			html.H1("This is an authorize page"),
+			html.Div(
+				html.Span("Api Key:"),
+				html.Input(html.Class("auth"), html.Value("foo")),
+			)),
+	}
 	b, err := NewBrowser(
 		petstoreDefinition,
 		themes.Dark, themes.Light, themes.HighContrast,
-		DefaultTheme("Dark"),
+		menu,
+		DefaultTheme{"Dark"},
 		ShowHeader(true), ShowFooter(true),
 		&testDocsPathDetector{},
 		&testPagingDetector{PagingInfo{
@@ -39,6 +53,7 @@ func TestBrowser_Write(t *testing.T) {
 			PageSizeParamName: "pageSize",
 			ShowDisabled:      true,
 		}, true},
+		&testCookieJar{},
 	)
 	require.NoError(t, err)
 	w := httptest.NewRecorder()
@@ -99,11 +114,28 @@ func TestBrowser_Write(t *testing.T) {
 
 type testDocsPathDetector struct{}
 
+var _ DocsPathDetector = &testDocsPathDetector{}
+
 func (t *testDocsPathDetector) ResolveDocsPath(r *http.Request, defPath []string) string {
 	return "/docs"
 }
 
-var _ DocsPathDetector = &testDocsPathDetector{}
+type testCookieJar struct{}
+
+var _ CookieJar = &testCookieJar{}
+
+func (*testCookieJar) HtmlResponseCookies(w http.ResponseWriter, r *http.Request) []*http.Cookie {
+	return []*http.Cookie{
+		{
+			Name:     "test-cookie",
+			Path:     "/",
+			SameSite: http.SameSiteStrictMode,
+			Secure:   true,
+			Expires:  time.Now().Add(15 * time.Minute),
+			Value:    "some value",
+		},
+	}
+}
 
 var petstoreDefinition = chioas.Definition{
 	Info: chioas.Info{
@@ -206,12 +238,4 @@ var petstoreDefinition = chioas.Definition{
 			},
 		},
 	},
-}
-
-func TestPetstoreYaml(t *testing.T) {
-	f, err := os.Create("petstore.yaml")
-	require.NoError(t, err)
-	defer f.Close()
-	err = petstoreDefinition.WriteYaml(f)
-	require.NoError(t, err)
 }

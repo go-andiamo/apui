@@ -26,6 +26,7 @@ type Repository interface {
 	SearchPets(ctx context.Context, filter *params.PetFilter) ([]*models.Pet, error)
 	GetPet(ctx context.Context, id string) (*models.Pet, error)
 	AddPet(ctx context.Context, pet requests.AddPet) (*models.Pet, error)
+	UpdatePet(ctx context.Context, id string, update requests.UpdatePet) (*models.Pet, error)
 	DeletePet(ctx context.Context, id string) error
 	ListCategories(ctx context.Context) ([]models.Category, error)
 	GetCategory(ctx context.Context, id string) (models.Category, error)
@@ -94,7 +95,7 @@ func (r *repository) GetPet(ctx context.Context, id string) (*models.Pet, error)
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 	for _, pet := range r.pets {
-		if pet.Id.String() == id {
+		if strings.EqualFold(pet.Id.String(), id) {
 			return pet, nil
 		}
 	}
@@ -106,7 +107,7 @@ func (r *repository) AddPet(ctx context.Context, pet requests.AddPet) (*models.P
 	defer r.mutex.Unlock()
 	var category *models.Category
 	for _, c := range r.categories {
-		if pet.Category.Id == c.Id.String() || pet.Category.Name == c.Name {
+		if strings.EqualFold(pet.Category.Id, c.Id.String()) || strings.EqualFold(pet.Category.Name, c.Name) {
 			category = &c
 			break
 		}
@@ -126,11 +127,39 @@ func (r *repository) AddPet(ctx context.Context, pet requests.AddPet) (*models.P
 	return result, nil
 }
 
+func (r *repository) UpdatePet(ctx context.Context, id string, update requests.UpdatePet) (*models.Pet, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	var setCategory *models.Category
+	if update.Category != nil {
+		for _, category := range r.categories {
+			if strings.EqualFold(category.Id.String(), update.Category.Id) || strings.EqualFold(update.Category.Name, category.Name) {
+				setCategory = &category
+				break
+			}
+		}
+		if setCategory == nil {
+			return nil, httperr.NewUnprocessableEntityError("category not found")
+		}
+	}
+	for _, pet := range r.pets {
+		if strings.EqualFold(pet.Id.String(), id) {
+			pet.Name = update.Name
+			pet.DoB = update.DoB
+			if setCategory != nil {
+				pet.Category = *setCategory
+			}
+			return pet, nil
+		}
+	}
+	return nil, httperr.NewNotFoundError("pet not found")
+}
+
 func (r *repository) DeletePet(ctx context.Context, id string) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	for i, pet := range r.pets {
-		if pet.Id.String() == id {
+		if strings.EqualFold(pet.Id.String(), id) {
 			r.pets[i] = r.pets[len(r.pets)-1]
 			r.pets = r.pets[:len(r.pets)-1]
 			return nil
@@ -149,7 +178,7 @@ func (r *repository) GetCategory(ctx context.Context, id string) (models.Categor
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 	for _, c := range r.categories {
-		if c.Id.String() == id {
+		if strings.EqualFold(c.Id.String(), id) {
 			return c, nil
 		}
 	}

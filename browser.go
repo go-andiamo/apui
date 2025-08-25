@@ -29,6 +29,8 @@ type Browser struct {
 	resourceTypeDetector ResourceTypeDetector
 	docsPathDetector     DocsPathDetector
 	logo                 aitch.Node
+	menu                 *Menu
+	cookieJar            CookieJar
 }
 
 func NewBrowser(options ...any) (*Browser, error) {
@@ -54,7 +56,7 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 		switch option := o.(type) {
 		case HtmlTemplate:
 			htmlSet = true
-			htmlTemplate = string(option)
+			htmlTemplate = option.Template
 		case *chioas.Definition:
 			b.definition = option
 		case chioas.Definition:
@@ -117,9 +119,17 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 		case ShowFooter:
 			b.showFooter = bool(option)
 		case DefaultTheme:
-			b.defaultTheme, _ = themes.NormalizeName(string(option))
+			b.defaultTheme, _ = themes.NormalizeName(option.Name)
 		case Logo:
 			b.logo = option.Node
+		case Menu:
+			if s := b.addMenuOption(&option); s != nil {
+				styles = append(styles, s)
+			}
+		case *Menu:
+			if s := b.addMenuOption(option); s != nil {
+				styles = append(styles, s)
+			}
 		default:
 			// interfaces...
 			if intf, ok := o.(ResourceTypeDetector); ok {
@@ -130,6 +140,9 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			}
 			if intf, ok := o.(DocsPathDetector); ok {
 				b.docsPathDetector = intf
+			}
+			if intf, ok := o.(CookieJar); ok {
+				b.cookieJar = intf
 			}
 		}
 	}
@@ -177,6 +190,24 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 	return b, nil
 }
 
+func (b *Browser) addMenuOption(menu *Menu) aitch.Node {
+	b.menu = menu
+	for _, link := range menu.Links {
+		if link.Href != "" {
+			if link.Rel == "" {
+				b.headNodes = append(b.headNodes, html.Link(html.Href(link.Href), html.Rel("stylesheet")))
+			} else {
+				b.headNodes = append(b.headNodes, html.Link(html.Href(link.Href), html.Rel(link.Rel)))
+			}
+		}
+	}
+	var styleNode aitch.Node
+	if menu.AddCss != "" {
+		styleNode = html.StyleElement([]byte{'\n'}, menu.AddCss, []byte{'\n'})
+	}
+	return styleNode
+}
+
 func (b *Browser) writeHead(ctx aitch.ImperativeContext) error {
 	for _, node := range b.headNodes {
 		if err := node.Render(ctx.Context()); err != nil {
@@ -221,6 +252,13 @@ func (b *Browser) Write(w http.ResponseWriter, r *http.Request, response any, ad
 		keyShowFooter: b.showFooter,
 		keyRequest:    r,
 		keyResponse:   response,
+	}
+	if b.cookieJar != nil {
+		for _, cookie := range b.cookieJar.HtmlResponseCookies(w, r) {
+			if cookie != nil {
+				http.SetCookie(w, cookie)
+			}
+		}
 	}
 	if err := b.template.Execute(w, data, cargo); err != nil {
 		panic(err)

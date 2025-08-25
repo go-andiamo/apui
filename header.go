@@ -69,15 +69,14 @@ func (b *Browser) writeHeader(ctx aitch.ImperativeContext) error {
 }
 
 func (b *Browser) writeHeaderDropdown(ctx aitch.ImperativeContext) {
-	endpoints := showableEndpoints(b.definition)
-	// only show menu if there's something to put in it...
-	if len(endpoints) > 0 || len(b.themes) > 0 {
+	if show, endpoints := b.showMenu(); show {
 		marker := ctx.Marker()
 		ctx.Start(elemDiv, false, html.Class("menus")).
 			Start(elemDetails, false, html.Class("dropdown"), detailsOnToggle).
 			Start(elemSummary, false).End().
 			Start(elemDiv, false, html.Class("dropdown-menu"))
-		if len(b.themes) > 0 {
+		// themes select...
+		if b.menu.ShowThemeSelect && len(b.themes) > 0 {
 			ctx.Start(elemDiv, false).
 				WriteElement(elemSpan, "Theme:").
 				WriteRaw(nbsp).
@@ -88,36 +87,72 @@ func (b *Browser) writeHeaderDropdown(ctx aitch.ImperativeContext) {
 					WriteString(theme.Name).End()
 			}
 			ctx.End().End()
-			if len(endpoints) > 0 {
+			if len(endpoints) > 0 || b.menu.AuthorizationNode != nil || len(b.menu.Additional) > 0 {
 				ctx.Start(elemHr, true)
 			}
 		}
-		if emptyTag, ok := endpoints[""]; ok {
-			ctx.Start(elemH4, false).WriteString("Endpoints").End()
-			for _, e := range emptyTag {
-				ctx.Start(elemDiv, false, html.Class("ll")).
-					Start(elemA, false, html.Href(e.path), html.Title(e.method.Description)).
-					WriteString(e.path).End().End()
+		// authorization...
+		if b.menu.AuthorizationNode != nil {
+			ctx.Start(elemDiv, false, classLl).
+				Start(elemDetails, false).
+				Start(elemSummary, false).WriteString("Authorization").End().
+				Start(elemDiv, false)
+			_ = b.menu.AuthorizationNode.Render(ctx.Context())
+			ctx.End().End().End()
+			if len(endpoints) > 0 || len(b.menu.Additional) > 0 {
+				ctx.Start(elemHr, true)
 			}
 		}
-
-		sortedKeys := make([]string, 0, len(endpoints))
-		for k := range endpoints {
-			if k != "" {
-				sortedKeys = append(sortedKeys, k)
+		// endpoints...
+		if len(endpoints) > 0 {
+			if emptyTag, ok := endpoints[""]; ok {
+				ctx.Start(elemH4, false).WriteString("Endpoints").End()
+				for _, e := range emptyTag {
+					ctx.Start(elemDiv, false, html.Class("ll")).
+						Start(elemA, false, html.Href(e.path), html.Title(e.method.Description)).
+						WriteString(e.path).End().End()
+				}
+			}
+			sortedKeys := make([]string, 0, len(endpoints))
+			for k := range endpoints {
+				if k != "" {
+					sortedKeys = append(sortedKeys, k)
+				}
+			}
+			sort.Strings(sortedKeys)
+			for _, k := range sortedKeys {
+				ctx.Start(elemH4, false).WriteString(k).End()
+				for _, e := range endpoints[k] {
+					ctx.Start(elemDiv, false).
+						Start(elemA, false, html.Href(e.path), html.Title(e.method.Description)).
+						WriteString(e.path).End().End()
+				}
+			}
+			if len(b.menu.Additional) > 0 {
+				ctx.Start(elemHr, true)
 			}
 		}
-		sort.Strings(sortedKeys)
-		for _, k := range sortedKeys {
-			ctx.Start(elemH4, false).WriteString(k).End()
-			for _, e := range endpoints[k] {
-				ctx.Start(elemDiv, false).
-					Start(elemA, false, html.Href(e.path), html.Title(e.method.Description)).
-					WriteString(e.path).End().End()
+		// additional...
+		for _, a := range b.menu.Additional {
+			if a != nil {
+				_ = a.Render(ctx.Context())
 			}
 		}
 		ctx.EndToMark(marker)
 	}
+}
+
+func (b *Browser) showMenu() (show bool, endpoints map[string][]showableEndpoint) {
+	if b.menu != nil && b.menu.Show {
+		if b.menu.ShowEndpoints {
+			endpoints = showableEndpoints(b.definition)
+		}
+		show = (b.menu.ShowThemeSelect && len(b.themes) > 0) ||
+			len(endpoints) > 0 ||
+			b.menu.AuthorizationNode != nil ||
+			len(b.menu.Additional) > 0
+	}
+	return show, endpoints
 }
 
 func showableEndpoints(d *chioas.Definition) map[string][]showableEndpoint {

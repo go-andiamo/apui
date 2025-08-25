@@ -8,9 +8,15 @@ header.header {
 header.header a {
     color: var(--hdr-link-text-color, var(--body-link-text-color));
 }
-header.header select, body input, body button {
+header.header select, header.header input, header.header button {
     color: var(--hdr-text-color);
     background-color: var(--hdr-bg-color);
+}
+header.header input, header.header button {
+    border: 1px solid var(--hdr-border-color);
+}
+header.header button {
+    border-radius: 4px;
 }
 header.header div.title {
     float: left;
@@ -25,14 +31,14 @@ header.header div.menus {
 header.header .dropdown {
     z-index: 1000;
 }
-header.header .dropdown summary {
+header.header .dropdown > summary {
     list-style: none;
     cursor: pointer;
 }
 header.header .dropdown summary::-webkit-details-marker {
     display: none;
 }
-header.header .dropdown summary {
+header.header .dropdown > summary {
     display: inline-block;
     padding: 4px 8px;
     border: 1px solid var(--hdr-border-color);
@@ -42,13 +48,13 @@ header.header .dropdown summary {
     font-size: 18px;
     line-height: 1;
 }
-header.header .dropdown[open] summary {
+header.header .dropdown[open] > summary {
     border-radius: 4px 4px 0 0;
     color: var(--hdr-opened-text-color, var(--hdr-text-color));
     background-color: var(--hdr-opened-bg-color, var(--hdr-bg-color));
     border: 1px solid var(--hdr-border-color);
 }
-header.header .dropdown summary::after {
+header.header .dropdown > summary::after {
     content: "...";
     font-weight: bold;
 }
@@ -81,4 +87,12 @@ header.header span.logo {
     height: 1.5em;
     vertical-align: bottom;
     margin-right: 0.2em;
+}
+header.header .dropdown .dropdown-menu details {
+    margin-bottom: 0.5em;
+    border: 1px solid var(--hdr-border-color);
+    border-radius: 4px;
+}
+header.header .dropdown .dropdown-menu details > summary, header.header .dropdown .dropdown-menu details > div {
+    padding: 4px;
 }
