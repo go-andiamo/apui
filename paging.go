@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// PagingInfo is the paging info returned by PagingDetector.IsPaged
 type PagingInfo struct {
 	FirstPage         int    // not shown if negative
 	LastPage          int    // not shown if negative
@@ -24,6 +25,8 @@ type PagingInfo struct {
 	PostNode          aitch.Node
 }
 
+// PagingDetector is an interface option that can be passed to NewBrowser
+// and is used to determine if a resource response is paginated
 type PagingDetector interface {
 	IsPaged(response any, req *http.Request, def *chioas.Path) (PagingInfo, bool)
 }
