@@ -14,6 +14,7 @@ var (
 	queryParamsScripNode   = html.Script(scripts.QueryParamsScript)
 	queryParamsSummary     = html.Summary("Parameters")
 	queryParamsClass       = html.Class("qps")
+	queryParamsId          = html.Id("qps-detail")
 	queryParamsTableAtts   = []aitch.Node{html.Class("qps"), html.Id("qps")}
 	queryParamsAtts        = []aitch.Node{html.Class("qp")}
 	queryParamRemoveButton = html.Button(
@@ -22,12 +23,13 @@ var (
 		html.Class("remove"),
 		"-")
 	queryParamRemoveTd  = html.Td(queryParamRemoveButton)
-	addQueryParamButton = html.Button(
+	queryParamAddButton = html.Button(
 		html.OnClick([]byte("addQueryParam()")),
 		html.Title("Add"),
 		"+")
 	queryParamSelectId  = html.Id("qps-select")
-	queryParamsGetClass = html.Class("method get")
+	queryParamsGetClass = html.Class("method", "get")
+	queryParamsGetId    = html.Id("qps-get")
 )
 
 func (b *Browser) writeQueryParams(ctx aitch.ImperativeContext, req *http.Request, def *chioas.Path) {
@@ -60,9 +62,12 @@ func (b *Browser) writeQueryParams(ctx aitch.ImperativeContext, req *http.Reques
 	// has defined or current query params?...
 	if len(params) > 0 || len(curr) > 0 {
 		ctx.Start(elemSpan, false, classInlineDropdown).
-			Start(elemDetails, false, detailsOnToggle, queryParamsClass).
+			Start(elemDetails, false, detailsOnToggle, queryParamsClass, queryParamsId,
+				html.Data("path", []byte(req.URL.Path))).
 			WriteNodes(queryParamsScripNode, queryParamsSummary).
-			Start(elemDiv, false, contentClass)
+			Start(elemDiv, false, contentClass,
+				html.OnInput([]byte("buildQuery()")),
+				html.OnChange([]byte("buildQuery()")))
 		// existing params table...
 		ctx.Start(elemTable, false, queryParamsTableAtts...)
 		for _, c := range curr {
@@ -83,14 +88,13 @@ func (b *Browser) writeQueryParams(ctx aitch.ImperativeContext, req *http.Reques
 				ctx.WriteElement(elemOption, p.Name, html.Value(p.Name), html.Title(p.Description))
 			}
 			ctx.End(). //select
-					WriteNodes(addQueryParamButton).
+					WriteNodes(queryParamAddButton).
 					End() //div
 		}
-		// get button...
 		ctx.Start(elemDiv, false, classLr).
-			WriteElement(elemButton, req.Method,
-				queryParamsGetClass,
-				html.OnClick([]byte("queryParamsGet('"+req.URL.Path+"')"))).
-			EndAll()
+			Start(elemA, false,
+				html.Href([]byte(req.URL.Path+paramsBuild(req.URL.Query()))),
+				queryParamsGetClass, queryParamsGetId).WriteString("GET")
+		ctx.EndAll()
 	}
 }

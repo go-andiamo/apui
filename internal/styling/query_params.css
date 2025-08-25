@@ -1,6 +1,12 @@
 details.qps input, details.qps button, details.qps select {
     vertical-align: middle;
 }
+details.qps a.method {
+    display: inline-block;
+    margin-top: 4px;
+    margin-right: 0;
+    text-decoration: none;
+}
 table.qps th, table.qps td {
     border: 1px solid var(--nav-border-color);
     padding: 2px;

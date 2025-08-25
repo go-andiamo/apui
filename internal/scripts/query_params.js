@@ -1,6 +1,7 @@
 function removeQueryParam(evt) {
     const p = evt.target.parentElement.parentElement;
     document.getElementById('qps').deleteRow(p.rowIndex);
+    buildQuery();
 }
 function addQueryParam() {
     const qpName = document.getElementById("qps-select").value;
@@ -15,17 +16,18 @@ function addQueryParam() {
     cell3.innerHTML = '<button onclick="(e => removeQueryParam(e))(event)" class="remove" title="Remove">-</button>';
     row.querySelector('input').focus();
 }
-function queryParamsGet(path) {
-    let inps = document.querySelectorAll('table.qps input');
+function buildQuery() {
+    const a = document.getElementById("qps-get");
+    const url = document.getElementById("qps-detail").dataset.path;
     let params = [];
-    inps.forEach(el => {
+    document.querySelectorAll('table.qps input').forEach(el => {
         if (el.value !== '') {
             params.push(el.name+'='+encodeURIComponent(el.value));
         }
     })
     if (params.length > 0) {
-        window.location.href = path+'?'+params.join('&');
+        a.href = url+'?'+params.join('&');
     } else {
-        window.location.href = path;
+        a.href = url;
     }
 }
