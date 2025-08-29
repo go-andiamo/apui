@@ -1,6 +1,7 @@
 package apui
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-andiamo/aitch"
 	"github.com/go-andiamo/aitch/context"
@@ -10,6 +11,7 @@ import (
 	"github.com/go-andiamo/apui/internal/templates"
 	"github.com/go-andiamo/apui/themes"
 	"github.com/go-andiamo/chioas"
+	"gopkg.in/yaml.v3"
 	"net/http"
 )
 
@@ -61,6 +63,16 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			b.definition = option
 		case chioas.Definition:
 			b.definition = &option
+		case DefinitionYaml:
+			b.definition = &chioas.Definition{}
+			if err := yaml.Unmarshal(option.Data, b.definition); err != nil {
+				return nil, fmt.Errorf("failed to unmarshal definition: %v", err)
+			}
+		case DefinitionJson:
+			b.definition = &chioas.Definition{}
+			if err := json.Unmarshal(option.Data, b.definition); err != nil {
+				return nil, fmt.Errorf("failed to unmarshal definition: %v", err)
+			}
 		case HeadScript:
 			if option.Script != "" {
 				if option.Type != "" {

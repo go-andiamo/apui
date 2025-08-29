@@ -76,6 +76,15 @@ var definition = chioas.Definition{
 					},
 					Paths: chioas.Paths{
 						paths.UuidPath: {
+							PathParams: chioas.PathParams{
+								"id": {
+									Description: "Pet ID",
+									Schema: &chioas.Schema{
+										Type:   "string",
+										Format: "uuid",
+									},
+								},
+							},
 							Methods: chioas.Methods{
 								http.MethodGet: {
 									Handler:     (*api).GetPet,
@@ -125,6 +134,15 @@ var definition = chioas.Definition{
 					},
 					Paths: chioas.Paths{
 						paths.UuidPath: {
+							PathParams: chioas.PathParams{
+								"id": {
+									Description: "Category ID",
+									Schema: &chioas.Schema{
+										Type:   "string",
+										Format: "uuid",
+									},
+								},
+							},
 							Methods: chioas.Methods{
 								http.MethodGet: {
 									Handler:     (*api).GetCategory,

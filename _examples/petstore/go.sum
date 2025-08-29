@@ -11,6 +11,9 @@ github.com/go-andiamo/chioas v1.16.5 h1:YTGx/JduqCVCRyyzr1lECuc9XT8XJdxKZ3NwIN7p
 github.com/go-andiamo/chioas v1.16.5/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
 github.com/go-andiamo/chioas v1.16.6 h1:4ScXH+t9bID8yYw0ru8Y7+S/4n1SEf5KW3LRFhTVQjI=
 github.com/go-andiamo/chioas v1.16.6/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5vCk+Guw+uc=
+github.com/go-andiamo/chioas v1.17.0/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
+github.com/go-andiamo/chioas v1.17.1 h1:3WZUNsnodsTqGN2v9rFTOp2p5b9bJ95X6L/oH0lcFaI=
+github.com/go-andiamo/chioas v1.17.1/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
 github.com/go-andiamo/httperr v1.0.0 h1:HC0AErLJ1+sXGg9BnPScUsdJV/dnPdg4uuPuinYKItk=
 github.com/go-andiamo/httperr v1.0.0/go.mod h1:pS8gozYTa9WDhOXKpy0Z8N42U70awODLcQ6GSzis7wE=
 github.com/go-andiamo/httperr v1.0.1 h1:Wk7Gn0lPKPJpRHPSHhc6xK9rSsQgrm1xRcQko3SxTYs=
@@ -38,6 +41,8 @@ github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZV
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
+go.yaml.in/yaml/v2 v2.4.2 h1:DzmwEr2rDGHl7lsFgAHxmNz/1NlQ7xLIrlN2h5d1eGI=
+go.yaml.in/yaml/v2 v2.4.2/go.mod h1:081UH+NErpNdqlCXm3TtEran0rJZGxAYx9hb/ELlsPU=
 golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df h1:UA2aFVmmsIlefxMk29Dp2juaUSth8Pyn3Tq5Y5mJGME=
 golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df/go.mod h1:FXUEEKJgO7OQYeo8N01OfiKP8RXMtf6e8aTskBGqWdc=
 golang.org/x/net v0.37.0 h1:1zLorHbz+LYj7MQlSf1+2tPIIgibq2eL5xkrGk6f+2c=
@@ -47,3 +52,5 @@ gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntN
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+sigs.k8s.io/yaml v1.6.0 h1:G8fkbMSAFqgEFgh4b1wmtzDnioxFCUgTZhlbj5P9QYs=
+sigs.k8s.io/yaml v1.6.0/go.mod h1:796bPqUfzR/0jLAl6XjHl3Ck7MiyVv8dbTdyT3/pMf4=
