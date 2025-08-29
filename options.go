@@ -123,3 +123,15 @@ type CookieJar interface {
 	// HtmlResponseCookies supplies cookies to be written for html responses
 	HtmlResponseCookies(w http.ResponseWriter, r *http.Request) []*http.Cookie
 }
+
+// DefinitionYaml is an option that can be passed to NewBrowser
+// and contains the yaml api spec to use (as definition)
+type DefinitionYaml struct {
+	Data []byte
+}
+
+// DefinitionJson is an option that can be passed to NewBrowser
+// and contains the json api spec to use (as definition)
+type DefinitionJson struct {
+	Data []byte
+}
