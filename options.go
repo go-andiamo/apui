@@ -2,6 +2,7 @@ package apui
 
 import (
 	"github.com/go-andiamo/aitch"
+	"github.com/go-andiamo/aitch/html"
 	"net/http"
 )
 
@@ -134,4 +135,30 @@ type DefinitionYaml struct {
 // and contains the json api spec to use (as definition)
 type DefinitionJson struct {
 	Data []byte
+}
+
+// MobileFriendly is an option that can be passed to NewBrowser
+// and makes UI display more mobile friendly (i.e. adds MobileViewport & MobileStyling)
+type MobileFriendly bool
+
+var MobileViewport = AddHeadNode{
+	Node: html.Meta(html.Name("viewport"), html.Content("width=device-width, initial-scale=1")),
+}
+
+var MobileStyling = AddStyling{
+	Media: "(max-width: 767px)",
+	Content: `footer.footer {
+	display:none;
+}
+header.navigation details .content {
+	max-width: calc(100vw - 16px);
+	left: 8px;
+}
+.navigation details.ams pre {
+	min-width: calc(100vw - 24px); 
+	max-width: calc(100vw - 24px);
+}
+table.qps td input {
+	max-width: calc(100vw - 8em);
+}`,
 }

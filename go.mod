@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/andybalholm/cascadia v1.3.3
 	github.com/go-andiamo/aitch v1.4.5
-	github.com/go-andiamo/chioas v1.17.1
+	github.com/go-andiamo/chioas v1.18.4
 	github.com/go-andiamo/httperr v1.1.0
 	github.com/go-andiamo/splitter v1.2.5
 	github.com/stretchr/testify v1.10.0

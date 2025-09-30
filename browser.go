@@ -142,6 +142,11 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			if s := b.addMenuOption(option); s != nil {
 				styles = append(styles, s)
 			}
+		case MobileFriendly:
+			if option {
+				b.headNodes = append(b.headNodes, MobileViewport.Node)
+				styles = append(styles, html.StyleElement(aitch.Attribute("media", MobileStyling.Media), []byte("\n"+MobileStyling.Content)))
+			}
 		default:
 			// interfaces...
 			if intf, ok := o.(ResourceTypeDetector); ok {
