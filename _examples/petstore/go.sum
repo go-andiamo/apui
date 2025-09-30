@@ -14,6 +14,11 @@ github.com/go-andiamo/chioas v1.16.6/go.mod h1:5ZZYYuGwlF/amxErKFUu3eXz6hZ5GEYu5
 github.com/go-andiamo/chioas v1.17.0/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
 github.com/go-andiamo/chioas v1.17.1 h1:3WZUNsnodsTqGN2v9rFTOp2p5b9bJ95X6L/oH0lcFaI=
 github.com/go-andiamo/chioas v1.17.1/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
+github.com/go-andiamo/chioas v1.18.0/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
+github.com/go-andiamo/chioas v1.18.2 h1:7RCWP1vcAfyfQN3Ehk5aEeiwQX6ozJPl4GmYSVKbmGk=
+github.com/go-andiamo/chioas v1.18.2/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
+github.com/go-andiamo/chioas v1.18.4 h1:fbiRUgpVvTf86pP5QK5HsUh2drpjtMfK7krM1LPAq3A=
+github.com/go-andiamo/chioas v1.18.4/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
 github.com/go-andiamo/httperr v1.0.0 h1:HC0AErLJ1+sXGg9BnPScUsdJV/dnPdg4uuPuinYKItk=
 github.com/go-andiamo/httperr v1.0.0/go.mod h1:pS8gozYTa9WDhOXKpy0Z8N42U70awODLcQ6GSzis7wE=
 github.com/go-andiamo/httperr v1.0.1 h1:Wk7Gn0lPKPJpRHPSHhc6xK9rSsQgrm1xRcQko3SxTYs=

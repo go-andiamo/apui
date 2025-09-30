@@ -82,6 +82,7 @@ div.example {position:absolute;bottom:0;}`,
 		apui.DefaultTheme{"Dark"},
 		apui.ShowHeader(true), apui.ShowFooter(true),
 		menu,
+		apui.MobileFriendly(true),
 	)
 	if err != nil {
 		log.Fatal(err)
