@@ -3,6 +3,7 @@ package apui
 import (
 	"github.com/go-andiamo/aitch"
 	"github.com/go-andiamo/aitch/html"
+	"github.com/go-andiamo/apui/internal/styling"
 	"net/http"
 )
 
@@ -146,19 +147,6 @@ var MobileViewport = AddHeadNode{
 }
 
 var MobileStyling = AddStyling{
-	Media: "(max-width: 767px)",
-	Content: `footer.footer {
-	display:none;
-}
-header.navigation details .content {
-	max-width: calc(100vw - 16px);
-	left: 8px;
-}
-.navigation details.ams pre {
-	min-width: calc(100vw - 24px); 
-	max-width: calc(100vw - 24px);
-}
-table.qps td input {
-	max-width: calc(100vw - 8em);
-}`,
+	Media:   "(max-width: 767px)",
+	Content: styling.Mobile,
 }

@@ -1,0 +1,20 @@
+footer.footer {
+    display:none;
+}
+header.navigation .inline-dropdown {
+    display: block;
+    margin-left: 0;
+    margin-top: 4px;
+}
+header.navigation details .content {
+    width: calc(100vw - 18px);
+    max-width: calc(100vw - 18px);
+    border-radius: 0 0 4px 4px;
+}
+.navigation details.ams pre {
+    min-width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+}
+table.qps td input {
+    max-width: calc(100vw - 8em);
+}
