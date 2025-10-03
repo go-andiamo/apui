@@ -33,3 +33,6 @@ var assocMethods []byte
 var main []byte
 
 var BaseCssNode = html.StyleElement(base, methods, statuses, header, navigation, queryParams, pagination, assocMethods, main)
+
+//go:embed mobile.css
+var Mobile string

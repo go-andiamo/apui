@@ -5,8 +5,7 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-andiamo/aitch v1.4.5 h1:AG8DVbBg/NtrbXxCIwnKNWUeMAlfZVp1PCzxmU3gGX8=
 github.com/go-andiamo/aitch v1.4.5/go.mod h1:MRKizCFJiZ4Q0ltZxKUg44+M6wEm6iqilb71dML8TPI=
-github.com/go-andiamo/chioas v1.18.2 h1:7RCWP1vcAfyfQN3Ehk5aEeiwQX6ozJPl4GmYSVKbmGk=
-github.com/go-andiamo/chioas v1.18.2/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
+github.com/go-andiamo/chioas v1.18.4 h1:fbiRUgpVvTf86pP5QK5HsUh2drpjtMfK7krM1LPAq3A=
 github.com/go-andiamo/chioas v1.18.4/go.mod h1:kKI07KFIFBHrz95dDT595mXu+k6vFOGuidEmVN7NJAY=
 github.com/go-andiamo/httperr v1.1.0 h1:B3wmFsGrrDwn9CLb+Sb2r6AtpH3rrxrgzzh0oqRaWJE=
 github.com/go-andiamo/httperr v1.1.0/go.mod h1:pS8gozYTa9WDhOXKpy0Z8N42U70awODLcQ6GSzis7wE=
