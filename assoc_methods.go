@@ -93,7 +93,7 @@ func (b *Browser) associatedMethods(req *http.Request, def *chioas.Path) (result
 		currPath := strings.TrimSuffix(req.URL.Path, "/")
 		// methods on this path (exc. request method)...
 		for k, v := range def.Methods {
-			if k != req.Method {
+			if k != req.Method && !v.HideDocs {
 				result = append(result, associatedMethod{
 					method: k,
 					def:    v,
@@ -105,12 +105,14 @@ func (b *Browser) associatedMethods(req *http.Request, def *chioas.Path) (result
 		for path, pDef := range def.Paths {
 			if !strings.Contains(path, "{") {
 				for k, v := range pDef.Methods {
-					result = append(result, associatedMethod{
-						method:      k,
-						def:         v,
-						path:        currPath + path,
-						displayPath: path,
-					})
+					if !v.HideDocs {
+						result = append(result, associatedMethod{
+							method:      k,
+							def:         v,
+							path:        currPath + path,
+							displayPath: path,
+						})
+					}
 				}
 			}
 		}
