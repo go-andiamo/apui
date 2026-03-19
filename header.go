@@ -169,7 +169,7 @@ func collectShowables(endpoints map[string][]showableEndpoint, paths chioas.Path
 			if pathDef.Tag != "" {
 				tag = pathDef.Tag
 			}
-			if m, ok := pathDef.Methods[http.MethodGet]; ok {
+			if m, ok := pathDef.Methods[http.MethodGet]; ok && !m.HideDocs {
 				addShowable(endpoints, m, strings.TrimSuffix(currPath, "/")+path, tag)
 			}
 			collectShowables(endpoints, pathDef.Paths, strings.TrimSuffix(currPath, "/")+path, tag)
