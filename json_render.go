@@ -92,6 +92,7 @@ var jsonRenderNode = html.Div(
 				ctx.Start(elemCode, false)
 				ctx.WriteRaw([]byte(`"` + ptyName + `":`))
 				ctx.End()
+				ctx.Start(elemSpan, false)
 				ctx.WriteRaw(nbsp)
 				ctx.WriteRaw(quote)
 				ctx.Start(elemA, false, html.Href(uri), html.ContentEditable("false"))
@@ -101,6 +102,7 @@ var jsonRenderNode = html.Div(
 				if strings.HasSuffix(trimmed, `,`) {
 					ctx.WriteRaw(comma)
 				}
+				ctx.End()
 				ctx.Start(elemBr, true)
 			} else if strings.HasSuffix(trimmed, "{") {
 				if pre := strings.TrimSuffix(trimmed, "{"); pre != "" {
