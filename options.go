@@ -138,6 +138,13 @@ type DefinitionJson struct {
 	Data []byte
 }
 
+// ValueFormatter is an option that can be passed to NewBrowser
+// and is used to format values being displayed in tables
+type ValueFormatter interface {
+	// FormatValue takes the raw response value and formats it to the value to be displayed in the html output
+	FormatValue(value any) (formatted any)
+}
+
 // MobileFriendly is an option that can be passed to NewBrowser
 // and makes UI display more mobile friendly (i.e. adds MobileViewport & MobileStyling)
 type MobileFriendly bool

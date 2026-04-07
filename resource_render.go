@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"slices"
 	"strconv"
+	"time"
 )
 
 type ResourceType int
@@ -81,10 +82,13 @@ const (
 )
 
 var (
-	classKeep       = html.Class("keep")
-	classRight      = html.Class("right")
-	classNull       = html.Class("null")
-	tableRenderNode = html.Table(
+	classKeep  = html.Class("keep")
+	classRight = html.Class("right")
+	classNull  = html.Class("null")
+)
+
+func (b *Browser) buildTableRenderNode() aitch.Node {
+	return html.Table(
 		html.THead(
 			html.Tr(
 				aitch.IterateKey(keyHeaders, html.Th(func(ctx *context.Context) []byte {
@@ -96,41 +100,52 @@ var (
 			),
 		),
 		html.TBody(
-			aitch.IterateKey(keyItems, rowRenderNode),
+			aitch.IterateKey(keyItems, html.Tr(
+				aitch.Imperative(b.rowRender))),
 		),
 	)
-	rowRenderNode = html.Tr(
-		aitch.Imperative(func(ctx aitch.ImperativeContext) error {
-			row := ctx.Context().Data
-			if hdrs, ok := context.Get[[]string](ctx.Context().Parent, keyHeaders); ok {
-				for _, hdr := range hdrs {
-					v, present := row[hdr]
-					renderColumn(ctx, present, hdr, v, false)
-				}
-			}
-			ctx.Start(elemTd, false).
-				Start(elemDetails, false, classKeep).
-				Start(elemSummary, false).WriteString("JSON").End()
-			_ = jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, row))
-			ctx.EndAll()
-			return nil
-		}),
-	)
-)
+}
 
-func renderColumn(ctx aitch.ImperativeContext, present bool, name string, value any, noAlign bool) {
+func (b *Browser) rowRender(ctx aitch.ImperativeContext) error {
+	row := ctx.Context().Data
+	if hdrs, ok := context.Get[[]string](ctx.Context().Parent, keyHeaders); ok {
+		for _, hdr := range hdrs {
+			v, present := row[hdr]
+			b.renderColumn(ctx, present, hdr, v, false)
+		}
+	}
+	ctx.Start(elemTd, false).
+		Start(elemDetails, false, classKeep).
+		Start(elemSummary, false).WriteString("JSON").End()
+	_ = jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, row))
+	ctx.EndAll()
+	return nil
+}
+
+func (b *Browser) renderColumn(ctx aitch.ImperativeContext, present bool, name string, value any, noAlign bool) {
 	if !present {
 		ctx.Start(elemTd, false).End()
 		return
-	} else if value == nil {
+	}
+	if b.valueFormatter != nil {
+		value = b.valueFormatter.FormatValue(value)
+	}
+	var att aitch.Node
+	switch tv := value.(type) {
+	case nil:
 		ctx.Start(elemTd, false).
 			Start(elemSpan, false, classNull).
 			WriteString("null").
 			End().End()
 		return
-	}
-	var att aitch.Node
-	switch tv := value.(type) {
+	case aitch.Node:
+		ctx.Start(elemTd, false, att).
+			WriteNodes(tv).End()
+		return
+	case []aitch.Node:
+		ctx.Start(elemTd, false, att).
+			WriteNodes(tv...).End()
+		return
 	case json.Number:
 		att = classRight
 		value = tv.String()
@@ -138,14 +153,18 @@ func renderColumn(ctx aitch.ImperativeContext, present bool, name string, value 
 		att = classRight
 	case bool:
 		// nothing special
+	case time.Time:
+		value = tv.Format(time.RFC3339)
 	case string:
-		if DefaultUriPropertyDetector != nil && DefaultUriPropertyDetector.IsUriProperty(name) {
+		if b.uriPropertyDetector != nil && b.uriPropertyDetector.IsUriProperty(name) {
 			ctx.Start(elemTd, false).
 				Start(elemA, false, html.Href(tv)).
 				WriteString(tv).
 				End().End()
 			return
 		}
+	case fmt.Stringer:
+		value = tv.String()
 	default:
 		switch reflect.TypeOf(value).Kind() {
 		case reflect.Slice, reflect.Array:
@@ -154,6 +173,8 @@ func renderColumn(ctx aitch.ImperativeContext, present bool, name string, value 
 		case reflect.Map, reflect.Struct:
 			renderColumnJson(ctx, value, "Object")
 			return
+		default:
+			value = fmt.Sprintf("%v", value)
 		}
 	}
 	if noAlign {
@@ -221,7 +242,7 @@ func (b *Browser) writeMainEntity(ctx aitch.ImperativeContext, response any) {
 			ctx.Start(elemTr, false).
 				Start(elemTh, false, classRight).
 				WriteString(pty).End()
-			renderColumn(ctx, true, pty, obj[pty], true)
+			b.renderColumn(ctx, true, pty, obj[pty], true)
 			ctx.End() //tr
 		}
 		ctx.End().End().End().End()
@@ -246,7 +267,7 @@ func (b *Browser) writeMainCollection(ctx aitch.ImperativeContext, response any)
 		}
 	}
 	slices.Sort(hdrs)
-	_ = tableRenderNode.Render(context.New(ctx.Context().Writer, map[string]any{
+	_ = b.tableRenderNode.Render(context.New(ctx.Context().Writer, map[string]any{
 		keyHeaders: hdrs,
 		keyItems:   c,
 	}, nil))

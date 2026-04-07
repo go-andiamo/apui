@@ -21,6 +21,7 @@ var (
 
 type Browser struct {
 	template             *aitch.Template
+	tableRenderNode      aitch.Node
 	definition           *chioas.Definition
 	showHeader           bool
 	showFooter           bool
@@ -30,6 +31,8 @@ type Browser struct {
 	pagingDetector       PagingDetector
 	resourceTypeDetector ResourceTypeDetector
 	docsPathDetector     DocsPathDetector
+	valueFormatter       ValueFormatter
+	uriPropertyDetector  UriPropertyDetector
 	logo                 aitch.Node
 	menu                 *Menu
 	cookieJar            CookieJar
@@ -41,10 +44,12 @@ func NewBrowser(options ...any) (*Browser, error) {
 		showFooter:           true,
 		resourceTypeDetector: defaultResourceTypeDetector,
 		logo:                 logoSpan,
+		uriPropertyDetector:  DefaultUriPropertyDetector,
 	}).initialise(options...)
 }
 
 func (b *Browser) initialise(options ...any) (*Browser, error) {
+	b.tableRenderNode = b.buildTableRenderNode()
 	var htmlTemplate string
 	htmlSet := false
 	headScripts := []aitch.Node{html.Script(scripts.HeadScript)}
@@ -160,6 +165,12 @@ func (b *Browser) initialise(options ...any) (*Browser, error) {
 			}
 			if intf, ok := o.(CookieJar); ok {
 				b.cookieJar = intf
+			}
+			if intf, ok := o.(ValueFormatter); ok {
+				b.valueFormatter = intf
+			}
+			if intf, ok := o.(UriPropertyDetector); ok {
+				b.uriPropertyDetector = intf
 			}
 		}
 	}
