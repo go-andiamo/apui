@@ -117,7 +117,7 @@ func (b *Browser) rowRender(ctx aitch.ImperativeContext) error {
 	ctx.Start(elemTd, false).
 		Start(elemDetails, false, classKeep).
 		Start(elemSummary, false).WriteString("JSON").End()
-	_ = jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, row))
+	_ = b.jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, row))
 	ctx.EndAll()
 	return nil
 }
@@ -168,10 +168,10 @@ func (b *Browser) renderColumn(ctx aitch.ImperativeContext, present bool, name s
 	default:
 		switch reflect.TypeOf(value).Kind() {
 		case reflect.Slice, reflect.Array:
-			renderColumnJson(ctx, value, "Array")
+			b.renderColumnJson(ctx, value, "Array")
 			return
 		case reflect.Map, reflect.Struct:
-			renderColumnJson(ctx, value, "Object")
+			b.renderColumnJson(ctx, value, "Object")
 			return
 		default:
 			value = fmt.Sprintf("%v", value)
@@ -184,11 +184,11 @@ func (b *Browser) renderColumn(ctx aitch.ImperativeContext, present bool, name s
 		WriteNodes(aitch.Text(value)).End()
 }
 
-func renderColumnJson(ctx aitch.ImperativeContext, value any, title string) {
+func (b *Browser) renderColumnJson(ctx aitch.ImperativeContext, value any, title string) {
 	ctx.Start(elemTd, false).
 		Start(elemDetails, false, classKeep).
 		Start(elemSummary, false).WriteString(title).End()
-	_ = jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, value))
+	_ = b.jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, value))
 	ctx.End().End()
 }
 
@@ -219,7 +219,7 @@ func (b *Browser) writeMainEntity(ctx aitch.ImperativeContext, response any) {
 	ctx.Start(elemDiv, false).
 		Start(elemDetails, false, classKeep, open).
 		Start(elemSummary, false).WriteString("JSON").End()
-	_ = jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, response))
+	_ = b.jsonRenderNode.Render(context.New(ctx.Context().Writer, nil, response))
 	ctx.End().End()
 	if isObj {
 		ptys := make([]string, 0)
@@ -323,5 +323,5 @@ func (b *Browser) writeMainUnknown(ctx aitch.ImperativeContext, response any) {
 		Writer: ctx.Context().Writer,
 		Parent: ctx.Context(),
 	}
-	_ = jsonRenderNode.Render(jctx)
+	_ = b.jsonRenderNode.Render(jctx)
 }

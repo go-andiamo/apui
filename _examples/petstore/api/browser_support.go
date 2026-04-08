@@ -56,7 +56,6 @@ var (
 )
 
 func (a *api) setupBrowser() {
-	apui.SetUriProperty("$uri")
 	var err error
 	menu := &apui.Menu{
 		Show:            true,
@@ -75,6 +74,7 @@ div.example {position:absolute;bottom:0;}`,
 	}
 	a.browser, err = apui.NewBrowser(
 		a, // provides support for apui.ResourceTypeDetector, apui.PagingDetector & apui.DocsPathDetector
+		apui.NewUriPropertyDetector("$uri"),
 		apui.AddHeadNode{favIcon},
 		apui.Logo{logoImg},
 		definition,

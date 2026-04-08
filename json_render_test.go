@@ -14,10 +14,9 @@ import (
 func TestJsonRenderNode(t *testing.T) {
 	testCases := []struct {
 		item      any
+		options   []any
 		expectErr bool
 		expected  string
-		setup     func()
-		reset     func()
 	}{
 		{
 			item:     nil,
@@ -53,25 +52,19 @@ func TestJsonRenderNode(t *testing.T) {
 			}{
 				Foo: "some/uri",
 			},
+			options: []any{
+				&testUriPropertyDetector{properties: []string{"foo"}},
+			},
 			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo":</code><span>&nbsp;"<a href="some/uri" contenteditable="false">some/uri</a>",</span><br><span>&nbsp;&nbsp;</span><code>"bar": ""</code><br></div><code>}</code><br></div>`,
-			setup: func() {
-				DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"foo"}}
-			},
-			reset: func() {
-				DefaultUriPropertyDetector = nil
-			},
 		},
 		{
 			item: map[string]any{
 				"foo": "bar",
 			},
+			options: []any{
+				&testUriPropertyDetector{properties: []string{"foo"}},
+			},
 			expected: `<div class="json" contenteditable="true" onbeforeinput="return false"><div onclick="(e => collapsed(e))(event)">{<span class="expand">...</span><br><span>&nbsp;&nbsp;</span><code>"foo":</code><span>&nbsp;"<a href="bar" contenteditable="false">bar</a>"</span><br></div><code>}</code><br></div>`,
-			setup: func() {
-				DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"foo"}}
-			},
-			reset: func() {
-				DefaultUriPropertyDetector = nil
-			},
 		},
 		{
 			item: map[string]any{
@@ -94,13 +87,9 @@ func TestJsonRenderNode(t *testing.T) {
 	}
 	for i, tc := range testCases {
 		t.Run(fmt.Sprintf("[%d]", i+1), func(t *testing.T) {
-			if tc.setup != nil {
-				tc.setup()
-			}
-			if tc.reset != nil {
-				defer tc.reset()
-			}
-			s, err := testRender(jsonRenderNode, tc.item)
+			b, err := NewBrowser(tc.options...)
+			require.NoError(t, err)
+			s, err := testRender(b.jsonRenderNode, tc.item)
 			if tc.expectErr {
 				require.Error(t, err)
 			} else {
