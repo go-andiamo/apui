@@ -22,6 +22,7 @@ var (
 type Browser struct {
 	template             *aitch.Template
 	tableRenderNode      aitch.Node
+	jsonRenderNode       aitch.Node
 	definition           *chioas.Definition
 	showHeader           bool
 	showFooter           bool
@@ -50,6 +51,7 @@ func NewBrowser(options ...any) (*Browser, error) {
 
 func (b *Browser) initialise(options ...any) (*Browser, error) {
 	b.tableRenderNode = b.buildTableRenderNode()
+	b.jsonRenderNode = b.buildJsonRenderNode()
 	var htmlTemplate string
 	htmlSet := false
 	headScripts := []aitch.Node{html.Script(scripts.HeadScript)}

@@ -93,24 +93,41 @@ type Logo struct {
 // JsonIndent is the default indent to use when rendering json
 var JsonIndent = 2
 
+// UriPropertyDetector is an interface option that can be passed to NewBrowser
+// and is used to detect whether a given property is a uri property (i.e. the value is rendered as a link)
 type UriPropertyDetector interface {
 	IsUriProperty(ptyName string) bool
 }
 
 // DefaultUriPropertyDetector is the global setting used when rendering
-// json to determine whether a property contains a uri
+// json to determine whether a property contains a uri (i.e. the value is rendered as a link)
+//
+// when using NewBrowser, this detector is used as the default
 var DefaultUriPropertyDetector UriPropertyDetector = nil
 
-func SetUriProperty(ptyName string) {
-	DefaultUriPropertyDetector = &uriPropertyDetector{ptyName: ptyName}
+// SetUriProperty sets the global DefaultUriPropertyDetector
+func SetUriProperty(ptyNames ...string) {
+	DefaultUriPropertyDetector = NewUriPropertyDetector(ptyNames...)
+}
+
+// NewUriPropertyDetector creates a new UriPropertyDetector for the provided property names
+func NewUriPropertyDetector(ptyNames ...string) UriPropertyDetector {
+	result := &uriPropertyDetector{
+		ptyNames: make(map[string]struct{}, len(ptyNames)),
+	}
+	for _, ptyName := range ptyNames {
+		result.ptyNames[ptyName] = struct{}{}
+	}
+	return result
 }
 
 type uriPropertyDetector struct {
-	ptyName string
+	ptyNames map[string]struct{}
 }
 
 func (u *uriPropertyDetector) IsUriProperty(ptyName string) bool {
-	return u.ptyName == ptyName
+	_, ok := u.ptyNames[ptyName]
+	return ok
 }
 
 // DocsPathDetector is an interface option that can be passed to NewBrowser

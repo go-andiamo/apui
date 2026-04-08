@@ -21,11 +21,6 @@ func TestNewBrowser(t *testing.T) {
 }
 
 func TestBrowser_Write(t *testing.T) {
-	DefaultUriPropertyDetector = &testUriPropertyDetector{properties: []string{"$uri"}}
-	defer func() {
-		DefaultUriPropertyDetector = nil
-	}()
-
 	menu := Menu{
 		Show:            true,
 		ShowThemeSelect: true,
@@ -43,6 +38,7 @@ func TestBrowser_Write(t *testing.T) {
 		menu,
 		DefaultTheme{"Dark"},
 		ShowHeader(true), ShowFooter(true),
+		&testUriPropertyDetector{properties: []string{"$uri"}},
 		&testDocsPathDetector{},
 		&testPagingDetector{PagingInfo{
 			FirstPage:         1,
